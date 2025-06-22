@@ -1,471 +1,264 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>UmmChat - Firebase Realtime Chat</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-<style>
-  :root {
-    --primary-bg: #121212;
-    --secondary-bg: #1c1c1c;
-    --header-bg: #202c33;
-    --my-message-bg: #075e54;
-    --friend-message-bg: #262d31;
-    --text-color: #e0e0e0;
-    --placeholder-color: #888;
-    --accent-color: #056162;
-    --accent-hover-color: #0e8a96;
-    --online-color: limegreen;
-    --offline-color: gray;
-    --seen-tick-color: #99e1f7;
-    --border-radius-sm: 10px;
-    --border-radius-md: 20px;
-    --padding-sm: 10px;
-    --padding-md: 15px;
-  }
-
-  body {
-    font-family: 'Roboto', sans-serif;
-    background: var(--primary-bg);
-    color: var(--text-color);
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  header {
-    background: var(--header-bg);
-    padding: var(--padding-sm) var(--padding-md);
-    display: flex;
-    align-items: center;
-    gap: var(--padding-sm);
-    color: var(--text-color);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 10;
-  }
-
-  #statusDot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--offline-color);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-
-  #statusText {
-    font-size: 15px;
-    font-weight: 500;
-  }
-
-  #messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: var(--padding-sm);
-    display: flex;
-    flex-direction: column;
-    gap: var(--padding-sm);
-    background: var(--primary-bg);
-    scroll-behavior: smooth;
-  }
-
-  .message {
-    max-width: 85%;
-    padding: 10px 14px;
-    border-radius: var(--border-radius-md);
-    word-wrap: break-word;
-    position: relative;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: floatUp 0.3s forwards ease-out;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  }
-
-  .message.me {
-    background: var(--my-message-bg);
-    align-self: flex-end;
-    color: #fff;
-    border-bottom-right-radius: 4px;
-  }
-
-  .message.friend {
-    background: var(--friend-message-bg);
-    align-self: flex-start;
-    border-bottom-left-radius: 4px;
-  }
-
-  .message img {
-    max-width: 100%;
-    height: auto;
-    border-radius: var(--border-radius-sm);
-    display: block;
-    margin-top: 5px;
-  }
-
-  .seen-tick {
-    position: absolute;
-    bottom: 4px;
-    right: 8px;
-    font-size: 12px;
-    color: var(--seen-tick-color);
-    text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
-  }
-
-  #typingIndicator {
-    font-style: italic;
-    padding: 5px var(--padding-md);
-    height: 20px;
-    color: var(--placeholder-color);
-    font-size: 14px;
-  }
-
-  #inputArea {
-    display: flex;
-    padding: var(--padding-sm);
-    background: var(--header-bg);
-    gap: var(--padding-sm);
-    align-items: center;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 10;
-  }
-
-  #msgInput {
-    flex: 1;
-    padding: var(--padding-sm) var(--padding-md);
-    border-radius: var(--border-radius-md);
-    border: none;
-    font-size: 16px;
-    outline: none;
-    background: var(--secondary-bg);
-    color: var(--text-color);
-    resize: none;
-    min-height: 20px;
-    max-height: 100px;
-    overflow-y: auto;
-  }
-
-  button, label {
-    cursor: pointer;
-    background: var(--accent-color);
-    border: none;
-    border-radius: 50%;
-    width: 44px;
-    height: 44px;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background 0.3s ease, transform 0.2s ease;
-    font-size: 20px;
-    flex-shrink: 0;
-  }
-
-  button:hover, label:hover {
-    background: var(--accent-hover-color);
-    transform: translateY(-2px);
-  }
-  button:active, label:active {
-    transform: translateY(0);
-    background: var(--accent-color);
-  }
-
-  #fileInput {
-    display: none;
-  }
-
-  @keyframes floatUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UmmChat WhatsApp Style</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-bg: #111;
+      --header-bg: #202c33;
+      --my-msg-bg: #056162;
+      --friend-msg-bg: #2a3942;
+      --text-color: #e0e0e0;
+      --accent-color: #25D366;
     }
-  }
 
-  @media (max-width: 768px) {
     body {
-      font-size: 14px;
+      font-family: 'Roboto', sans-serif;
+      background: var(--primary-bg);
+      color: var(--text-color);
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      height: 100vh;
     }
+
+    #chatContainer {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 500px;
+      height: 100%;
+      background: var(--primary-bg);
+      border-left: 1px solid #333;
+      border-right: 1px solid #333;
+    }
+
     header {
-      padding: 8px var(--padding-sm);
+      display: flex;
+      align-items: center;
+      background: var(--header-bg);
+      padding: 10px;
+      gap: 10px;
     }
+
+    #statusDot {
+      width: 10px;
+      height: 10px;
+      background: gray;
+      border-radius: 50%;
+    }
+
     #statusText {
-      font-size: 13px;
-    }
-    .message {
-      max-width: 90%;
-      padding: 8px 12px;
       font-size: 14px;
     }
-    .message img {
-      max-width: 180px;
-    }
-    .seen-tick {
-      font-size: 10px;
-      bottom: 2px;
-      right: 6px;
-    }
-    #inputArea {
-      padding: 8px;
-      gap: 8px;
-    }
-    #msgInput {
-      padding: 8px 12px;
-      font-size: 14px;
-    }
-    button, label {
-      width: 40px;
-      height: 40px;
-      font-size: 18px;
-    }
-  }
 
-  @media (min-width: 769px) {
-    body {
-      max-width: 700px;
-      margin: 0 auto;
-      border-left: 1px solid var(--secondary-bg);
-      border-right: 1px solid var(--secondary-bg);
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    #messages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
     }
-    header {
-      border-top-left-radius: var(--border-radius-md);
-      border-top-right-radius: var(--border-radius-md);
+
+    .msg {
+      max-width: 80%;
+      padding: 8px 12px;
+      border-radius: 10px;
+      position: relative;
+      word-wrap: break-word;
     }
+
+    .me {
+      align-self: flex-end;
+      background: var(--my-msg-bg);
+    }
+
+    .friend {
+      align-self: flex-start;
+      background: var(--friend-msg-bg);
+    }
+
+    .seen {
+      font-size: 10px;
+      position: absolute;
+      bottom: 2px;
+      right: 4px;
+    }
+
     #inputArea {
-      border-bottom-left-radius: var(--border-radius-md);
-      border-bottom-right-radius: var(--border-radius-md);
+      display: flex;
+      padding: 8px;
+      background: var(--header-bg);
+      align-items: center;
+      gap: 5px;
     }
-  }
-</style>
+
+    #msgInput {
+      flex: 1;
+      padding: 8px;
+      border: none;
+      border-radius: 20px;
+      background: #2a3942;
+      color: var(--text-color);
+      font-size: 14px;
+    }
+
+    button {
+      background: var(--accent-color);
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    #emojiPanel {
+      display: none;
+      position: absolute;
+      bottom: 60px;
+      left: 10px;
+      right: 10px;
+      background: #2a3942;
+      max-height: 200px;
+      overflow-y: auto;
+      border-radius: 10px;
+      padding: 5px;
+    }
+
+    #emojiPanel span {
+      font-size: 22px;
+      padding: 4px;
+      cursor: pointer;
+    }
+
+    #emojiBtn {
+      font-size: 18px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
+  <div id="chatContainer">
+    <header>
+      <div id="statusDot"></div>
+      <div id="statusText">Connecting...</div>
+    </header>
 
-<header>
-  <div id="statusDot"></div>
-  <div id="statusText">Connecting...</div>
-</header>
+    <div id="messages"></div>
 
-<div id="messages"></div>
-<div id="typingIndicator"></div>
+    <div id="emojiPanel"></div>
 
-<div id="inputArea">
-  <label for="fileInput" title="Send Image"><i class="fas fa-image"></i></label>
-  <input type="file" id="fileInput" accept="image/*" />
-  <input type="text" id="msgInput" placeholder="Type your message..." autocomplete="off" />
-  <button id="sendBtn"><i class="fas fa-paper-plane"></i></button>
-</div>
+    <div id="inputArea">
+      <div id="emojiBtn">😊</div>
+      <input type="text" id="msgInput" placeholder="Type a message" />
+      <button id="sendBtn"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-  import { getDatabase, ref, onValue, push, set, onDisconnect } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getDatabase, ref, onValue, push, set, onDisconnect, update } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
 
-  // ====== Firebase Config ======
-  // Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyBdYjBNFt1RzRZ70-28Mj9njeHsKf7sEMo",
-  authDomain: "sample-firebase-ai-app-31682.firebaseapp.com",
-  projectId: "sample-firebase-ai-app-31682",
-  storageBucket: "sample-firebase-ai-app-31682.firebasestorage.app",
-  messagingSenderId: "531579886451",
-  appId: "1:531579886451:web:c1bb2dec5c53255f240306"
-};
+    const firebaseConfig = {
+      apiKey: "AIzaSyBdYjBNFt1RzRZ70-28Mj9njeHsKf7sEMo",
+      authDomain: "sample-firebase-ai-app-31682.firebaseapp.com",
+      projectId: "sample-firebase-ai-app-31682",
+      storageBucket: "sample-firebase-ai-app-31682.appspot.com",
+      messagingSenderId: "531579886451",
+      appId: "1:531579886451:web:c1bb2dec5c53255f240306"
+    };
 
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
+    const statusDot = document.getElementById('statusDot');
+    const statusText = document.getElementById('statusText');
+    const messagesDiv = document.getElementById('messages');
+    const msgInput = document.getElementById('msgInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const emojiPanel = document.getElementById('emojiPanel');
+    const emojiBtn = document.getElementById('emojiBtn');
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
+    let userId = localStorage.getItem('user_id') || 'user_' + Math.random().toString(36).substr(2,8);
+    localStorage.setItem('user_id', userId);
+    let chatId = prompt("Enter friend's ID or group ID:");
+    if (!chatId) chatId = 'default_chat';
 
-  // Elements
-  const statusDot = document.getElementById('statusDot');
-  const statusText = document.getElementById('statusText');
-  const messagesDiv = document.getElementById('messages');
-  const typingIndicator = document.getElementById('typingIndicator');
-  const msgInput = document.getElementById('msgInput');
-  const sendBtn = document.getElementById('sendBtn');
-  const fileInput = document.getElementById('fileInput');
+    const statusRef = ref(db, 'status/' + userId);
+    const chatRef = ref(db, 'chats/' + chatId);
 
-  // Generate/get user ID
-  let userId = localStorage.getItem('chat_user_id');
-  if (!userId) {
-    userId = 'user_' + Math.random().toString(36).substring(2, 10);
-    localStorage.setItem('chat_user_id', userId);
-    alert("Your User ID is: " + userId + "\nShare this with your friend!");
-  } else {
-    console.log("Your User ID is: " + userId);
-  }
+    set(statusRef, { state: 'online', lastSeen: Date.now() });
+    onDisconnect(statusRef).set({ state: 'offline', lastSeen: Date.now() });
 
-  // Ask friend user ID
-  let friendUserId = localStorage.getItem('chat_friend_user_id');
-  if (!friendUserId) {
-    friendUserId = prompt("Enter your friend's user ID (exactly the same as they set):");
-    if (friendUserId) {
-      localStorage.setItem('chat_friend_user_id', friendUserId);
-    } else {
-      alert("Friend's User ID is required to start chatting!");
-      msgInput.disabled = true;
-      sendBtn.disabled = true;
-      fileInput.disabled = true;
-    }
-  }
-
-  // Chat ID (alphabetical order)
-  function getChatId(a, b) {
-    return a < b ? a + '_' + b : b + '_' + a;
-  }
-  const chatId = (userId && friendUserId) ? getChatId(userId, friendUserId) : null;
-
-  if (chatId) {
-    const userStatusRef = ref(db, 'status/' + userId);
-    const friendStatusRef = ref(db, 'status/' + friendUserId);
-    const typingRef = ref(db, 'typing/' + userId);
-    const friendTypingRef = ref(db, 'typing/' + friendUserId);
-    const messagesRef = ref(db, 'chats/' + chatId);
-    const connectedRef = ref(db, '.info/connected');
-
-    onValue(connectedRef, (snap) => {
-      if (snap.val() === true) {
-        set(userStatusRef, 'online');
-        onDisconnect(userStatusRef).set('offline');
-        statusDot.style.backgroundColor = 'var(--online-color)';
-        statusText.textContent = 'You are Online';
-      } else {
-        set(userStatusRef, 'offline');
-        statusDot.style.backgroundColor = 'var(--offline-color)';
-        statusText.textContent = 'You are Offline';
-      }
-    });
-
-    onValue(friendStatusRef, (snap) => {
-      if (snap.val() === 'online') {
-        statusDot.style.backgroundColor = 'var(--online-color)';
-        statusText.textContent = 'Friend is Online';
-      } else {
-        statusDot.style.backgroundColor = 'var(--offline-color)';
-        statusText.textContent = 'Friend is Offline';
-      }
-    });
-
-    msgInput.addEventListener('input', () => {
-      if (msgInput.value.trim().length > 0) {
-        set(typingRef, true);
-      } else {
-        set(typingRef, false);
-      }
-    });
-
-    onValue(friendTypingRef, (snap) => {
+    onValue(ref(db, '.info/connected'), (snap) => {
       if (snap.val()) {
-        typingIndicator.textContent = 'Typing...';
+        statusDot.style.background = 'limegreen';
+        statusText.textContent = 'Online';
       } else {
-        typingIndicator.textContent = '';
+        statusDot.style.background = 'gray';
+        statusText.textContent = 'Offline';
       }
-    });
-
-    function addMessage(msg, key) {
-      const isMe = msg.userId === userId;
-      const msgEl = document.createElement('div');
-      msgEl.className = 'message ' + (isMe ? 'me' : 'friend');
-
-      if (msg.type === 'image') {
-        const img = document.createElement('img');
-        img.src = msg.data;
-        img.alt = "Sent image";
-        msgEl.appendChild(img);
-      } else {
-        msgEl.textContent = msg.data;
-      }
-
-      if (isMe && msg.seenBy && Object.keys(msg.seenBy).length > 1) {
-        const tick = document.createElement('span');
-        tick.className = 'seen-tick';
-        tick.innerHTML = '<i class="fas fa-check-double"></i>';
-        msgEl.appendChild(tick);
-      } else if (isMe) {
-        const tick = document.createElement('span');
-        tick.className = 'seen-tick';
-        tick.innerHTML = '<i class="fas fa-check"></i>';
-        msgEl.appendChild(tick);
-      }
-
-      messagesDiv.appendChild(msgEl);
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-      // Mark message as seen if from friend
-      if (!isMe) {
-        const seenRef = ref(db, `chats/${chatId}/${key}/seenBy/${userId}`);
-        set(seenRef, true);
-      }
-    }
-
-    onValue(messagesRef, (snapshot) => {
-      messagesDiv.innerHTML = '';
-      const msgs = snapshot.val();
-      if (!msgs) return;
-      Object.entries(msgs).forEach(([key, msg]) => {
-        addMessage(msg, key);
-      });
     });
 
     sendBtn.onclick = () => {
       const text = msgInput.value.trim();
       if (!text) return;
-      const newMsgRef = push(messagesRef);
-      set(newMsgRef, {
+      const msgRef = push(chatRef);
+      set(msgRef, {
         userId,
-        type: 'text',
         data: text,
         timestamp: Date.now(),
-        seenBy: {
-          [userId]: true
-        }
+        seenBy: { [userId]: Date.now() }
       });
       msgInput.value = '';
-      set(typingRef, false);
     };
 
-    fileInput.onchange = () => {
-      const file = fileInput.files[0];
-      if (!file) return;
-      if (!file.type.startsWith('image/')) {
-        alert('Please select an image file');
-        fileInput.value = '';
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const newMsgRef = push(messagesRef);
-        set(newMsgRef, {
-          userId,
-          type: 'image',
-          data: e.target.result,
-          timestamp: Date.now(),
-          seenBy: {
-            [userId]: true
-          }
-        });
-        set(typingRef, false);
-      };
-      reader.readAsDataURL(file);
-      fileInput.value = '';
-    };
-
-    msgInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        sendBtn.click();
-        e.preventDefault();
-      }
+    onValue(chatRef, snap => {
+      messagesDiv.innerHTML = '';
+      snap.forEach(child => {
+        const msg = child.val();
+        const div = document.createElement('div');
+        div.className = 'msg ' + (msg.userId === userId ? 'me' : 'friend');
+        div.innerHTML = `${msg.data} <span class="seen">✔✔</span>`;
+        if (msg.userId !== userId) {
+          set(ref(db, `chats/${chatId}/${child.key}/seenBy/${userId}`), Date.now());
+        }
+        messagesDiv.appendChild(div);
+      });
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
 
-  } else {
-    statusDot.style.backgroundColor = 'red';
-    statusText.textContent = 'Please refresh and enter Friend ID to chat!';
-    msgInput.disabled = true;
-    sendBtn.disabled = true;
-    fileInput.disabled = true;
-  }
-</script>
+    const emojiList = ["😀","😁","😂","🤣","😃","😄","😅","😆","😉","😊","😋","😎","😍","😘","🥰","😗","😙","😚","🙂","🤗","🤩","🤔","🤨","😐","😑","😶","🙄","😏","😣","😥","😮","🤐","😯","😪","😫","😴","😌","😛","😜","😝","🤤","😒","😓","😔","😕","🙃","🤑","😲","☹️","🙁","😖","😞","😟","😤","😢","😭","😦","😧","😨","😩","🤯","😬","😰","😱","🥵","🥶","😳","🤪","😵","😡","😠","🤬","😷","🤒","🤕","🤢","🤮","🤧","😇","🥳","🥴","🥺","🤠","🤡","🤥","🤫","🤭","🧐"];
 
+    emojiBtn.onclick = () => {
+      if (emojiPanel.style.display === 'none' || emojiPanel.style.display === '') {
+        emojiPanel.innerHTML = '';
+        emojiList.forEach(e => {
+          const span = document.createElement('span');
+          span.textContent = e;
+          span.onclick = () => {
+            msgInput.value += e;
+            msgInput.focus();
+          };
+          emojiPanel.appendChild(span);
+        });
+        emojiPanel.style.display = 'block';
+      } else {
+        emojiPanel.style.display = 'none';
+      }
+    };
+
+    document.addEventListener('click', (e) => {
+      if (!emojiPanel.contains(e.target) && e.target !== emojiBtn) {
+        emojiPanel.style.display = 'none';
+      }
+    });
+  </script>
 </body>
 </html>
