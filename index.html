@@ -162,17 +162,20 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-    import { getDatabase, ref, onValue, push, set, onDisconnect, update } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBdYjBNFt1RzRZ70-28Mj9njeHsKf7sEMo",
-      authDomain: "sample-firebase-ai-app-31682.firebaseapp.com",
-      projectId: "sample-firebase-ai-app-31682",
-      storageBucket: "sample-firebase-ai-app-31682.appspot.com",
-      messagingSenderId: "531579886451",
-      appId: "1:531579886451:web:c1bb2dec5c53255f240306"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyAxb8vACQClmiEsB886aaHFMAitu0wEVQo",
+    authDomain: "ummchat009.firebaseapp.com",
+    projectId: "ummchat009",
+    storageBucket: "ummchat009.firebasestorage.app",
+    messagingSenderId: "880860486384",
+    appId: "1:880860486384:web:85ce4f7ccb70eb1c5f8035",
+    measurementId: "G-FD3Y6VZ1MJ"
+  };
+
+
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
@@ -226,13 +229,42 @@
         const div = document.createElement('div');
         div.className = 'msg ' + (msg.userId === userId ? 'me' : 'friend');
         div.innerHTML = `${msg.data} <span class="seen">✔✔</span>`;
+        div.onclick = () => openMessageMenu(child.key, msg);
         if (msg.userId !== userId) {
           set(ref(db, `chats/${chatId}/${child.key}/seenBy/${userId}`), Date.now());
+          showNotification('New Message', msg.data);
         }
         messagesDiv.appendChild(div);
       });
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
+
+    function openMessageMenu(key, msg) {
+      if (msg.userId !== userId) return;
+      const action = prompt("Type 'edit' to edit or 'delete' to delete:");
+      if (action === 'edit') {
+        const newText = prompt("Enter new message:", msg.data);
+        if (newText !== null) {
+          update(ref(db, `chats/${chatId}/${key}`), { data: newText + " (edited)" });
+        }
+      }
+      if (action === 'delete') {
+        if (confirm("Are you sure you want to delete this message?")) {
+          set(ref(db, `chats/${chatId}/${key}`), null);
+        }
+      }
+    }
+
+    // Notification permission
+    if (Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+
+    function showNotification(title, body) {
+      if (document.hidden && Notification.permission === 'granted') {
+        new Notification(title, { body });
+      }
+    }
 
     const emojiList = ["😀","😁","😂","🤣","😃","😄","😅","😆","😉","😊","😋","😎","😍","😘","🥰","😗","😙","😚","🙂","🤗","🤩","🤔","🤨","😐","😑","😶","🙄","😏","😣","😥","😮","🤐","😯","😪","😫","😴","😌","😛","😜","😝","🤤","😒","😓","😔","😕","🙃","🤑","😲","☹️","🙁","😖","😞","😟","😤","😢","😭","😦","😧","😨","😩","🤯","😬","😰","😱","🥵","🥶","😳","🤪","😵","😡","😠","🤬","😷","🤒","🤕","🤢","🤮","🤧","😇","🥳","🥴","🥺","🤠","🤡","🤥","🤫","🤭","🧐"];
 
