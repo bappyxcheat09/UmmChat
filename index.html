@@ -262,15 +262,17 @@
   import { getDatabase, ref, onValue, push, set, onDisconnect } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
 
   // ====== Firebase Config ======
-  const firebaseConfig = {
-    apiKey: "AIzaSyBdYjBNFt1RzRZ70-28Mj9njeHsKf7sEMo",
-    authDomain: "sample-firebase-ai-app-31682.firebaseapp.com",
-    databaseURL: "https://sample-firebase-ai-app-31682-default-rtdb.firebaseio.com",
-    projectId: "sample-firebase-ai-app-31682",
-    storageBucket: "sample-firebase-ai-app-31682.appspot.com",
-    messagingSenderId: "531579886451",
-    appId: "1:531579886451:web:692cfb702d007ebc240306"
-  };
+  // Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBdYjBNFt1RzRZ70-28Mj9njeHsKf7sEMo",
+  authDomain: "sample-firebase-ai-app-31682.firebaseapp.com",
+  projectId: "sample-firebase-ai-app-31682",
+  storageBucket: "sample-firebase-ai-app-31682.firebasestorage.app",
+  messagingSenderId: "531579886451",
+  appId: "1:531579886451:web:c1bb2dec5c53255f240306"
+};
+
+
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
