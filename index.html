@@ -162,20 +162,17 @@
   </div>
 
   <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getDatabase, ref, onValue, push, set, onDisconnect, update } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyAxb8vACQClmiEsB886aaHFMAitu0wEVQo",
-    authDomain: "ummchat009.firebaseapp.com",
-    projectId: "ummchat009",
-    storageBucket: "ummchat009.firebasestorage.app",
-    messagingSenderId: "880860486384",
-    appId: "1:880860486384:web:85ce4f7ccb70eb1c5f8035",
-    measurementId: "G-FD3Y6VZ1MJ"
-  };
-
-
+    const firebaseConfig = {
+      apiKey: "AIzaSyAxb8vACQClmiEsB886aaHFMAitu0wEVQo",
+      authDomain: "ummchat009.firebaseapp.com",
+      projectId: "ummchat009",
+      storageBucket: "ummchat009.firebasestorage.app",
+      messagingSenderId: "880860486384",
+      appId: "1:880860486384:web:85ce4f7ccb70eb1c5f8035"
+    };
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
