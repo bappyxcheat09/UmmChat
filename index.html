@@ -1,293 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UmmChat WhatsApp Style</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <style>
-    :root {
-      --primary-bg: #111;
-      --header-bg: #202c33;
-      --my-msg-bg: #056162;
-      --friend-msg-bg: #2a3942;
-      --text-color: #e0e0e0;
-      --accent-color: #25D366;
-    }
-
-    body {
-      font-family: 'Roboto', sans-serif;
-      background: var(--primary-bg);
-      color: var(--text-color);
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      height: 100vh;
-    }
-
-    #chatContainer {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      max-width: 500px;
-      height: 100%;
-      background: var(--primary-bg);
-      border-left: 1px solid #333;
-      border-right: 1px solid #333;
-    }
-
-    header {
-      display: flex;
-      align-items: center;
-      background: var(--header-bg);
-      padding: 10px;
-      gap: 10px;
-    }
-
-    #statusDot {
-      width: 10px;
-      height: 10px;
-      background: gray;
-      border-radius: 50%;
-    }
-
-    #statusText {
-      font-size: 14px;
-    }
-
-    #messages {
-      flex: 1;
-      padding: 10px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .msg {
-      max-width: 80%;
-      padding: 8px 12px;
-      border-radius: 10px;
-      position: relative;
-      word-wrap: break-word;
-    }
-
-    .me {
-      align-self: flex-end;
-      background: var(--my-msg-bg);
-    }
-
-    .friend {
-      align-self: flex-start;
-      background: var(--friend-msg-bg);
-    }
-
-    .seen {
-      font-size: 10px;
-      position: absolute;
-      bottom: 2px;
-      right: 4px;
-    }
-
-    #inputArea {
-      display: flex;
-      padding: 8px;
-      background: var(--header-bg);
-      align-items: center;
-      gap: 5px;
-    }
-
-    #msgInput {
-      flex: 1;
-      padding: 8px;
-      border: none;
-      border-radius: 20px;
-      background: #2a3942;
-      color: var(--text-color);
-      font-size: 14px;
-    }
-
-    button {
-      background: var(--accent-color);
-      border: none;
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      color: #fff;
-      font-size: 16px;
-    }
-
-    #emojiPanel {
-      display: none;
-      position: absolute;
-      bottom: 60px;
-      left: 10px;
-      right: 10px;
-      background: #2a3942;
-      max-height: 200px;
-      overflow-y: auto;
-      border-radius: 10px;
-      padding: 5px;
-    }
-
-    #emojiPanel span {
-      font-size: 22px;
-      padding: 4px;
-      cursor: pointer;
-    }
-
-    #emojiBtn {
-      font-size: 18px;
-      cursor: pointer;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Mini Chat Login</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #121212;
+    color: #eee;
+    margin: 0; padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  #login, #chat {
+    background: #1f1f1f;
+    width: 90vw;
+    max-width: 400px;
+    border-radius: 12px;
+    padding: 20px;
+  }
+  #chat {
+    display: none;
+    flex-direction: column;
+    height: 90vh;
+  }
+  h2 {
+    margin-top: 0;
+    text-align: center;
+    font-weight: 600;
+    color: #25d366;
+  }
+  input {
+    width: 100%;
+    padding: 12px 10px;
+    margin: 10px 0;
+    background: #222;
+    border: none;
+    border-radius: 8px;
+    color: #eee;
+    font-size: 16px;
+  }
+  button {
+    width: 100%;
+    background: #25d366;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    color: #121212;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  #loginError {
+    color: #ff5252;
+    text-align: center;
+    margin-top: 5px;
+    font-size: 14px;
+  }
+  #messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    background: #222;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  .msg {
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    max-width: 75%;
+    word-wrap: break-word;
+  }
+  .me {
+    background: #25d366;
+    color: #121212;
+    margin-left: auto;
+  }
+  .other {
+    background: #333;
+  }
+  #inputArea {
+    display: flex;
+    gap: 8px;
+  }
+  #msgInput {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    background: #222;
+    color: #eee;
+  }
+</style>
 </head>
 <body>
-  <div id="chatContainer">
-    <header>
-      <div id="statusDot"></div>
-      <div id="statusText">Connecting...</div>
-    </header>
 
-    <div id="messages"></div>
+<!-- Login Section -->
+<div id="login">
+  <h2>Login to Chat</h2>
+  <input type="text" id="username" placeholder="Username" autocomplete="off" />
+  <input type="password" id="password" placeholder="Password" autocomplete="off" />
+  <button id="loginBtn">Login</button>
+  <div id="loginError"></div>
+</div>
 
-    <div id="emojiPanel"></div>
-
-    <div id="inputArea">
-      <div id="emojiBtn">😊</div>
-      <input type="text" id="msgInput" placeholder="Type a message" />
-      <button id="sendBtn"><i class="fas fa-paper-plane"></i></button>
-    </div>
+<!-- Chat Section -->
+<div id="chat" style="display: flex; flex-direction: column;">
+  <h2>Global Chat</h2>
+  <div id="messages"></div>
+  <div id="inputArea">
+    <input id="msgInput" type="text" placeholder="Type a message..." autocomplete="off" />
+    <button id="sendBtn">Send</button>
   </div>
+</div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-    import { getDatabase, ref, onValue, push, set, onDisconnect, update } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+  import { getDatabase, ref, push, onValue, set } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAxb8vACQClmiEsB886aaHFMAitu0wEVQo",
-      authDomain: "ummchat009.firebaseapp.com",
-      projectId: "ummchat009",
-      storageBucket: "ummchat009.firebasestorage.app",
-      messagingSenderId: "880860486384",
-      appId: "1:880860486384:web:85ce4f7ccb70eb1c5f8035"
-    };
+  // ফিক্সড ইউজারনেম ও পাসওয়ার্ড
+  const validUsers = {
+    "bappy": "1234",
+    "user1": "abcd"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+  const firebaseConfig = {
+    apiKey: "AIzaSyAxb8vACQClmiEsB886aaHFMAitu0wEVQo",
+    authDomain: "ummchat009.firebaseapp.com",
+    databaseURL: "https://ummchat009-default-rtdb.firebaseio.com/",
+    projectId: "ummchat009",
+    storageBucket: "ummchat009.appspot.com",
+    messagingSenderId: "880860486384",
+    appId: "1:880860486384:web:85ce4f7ccb70eb1c5f8035"
+  };
 
-    const statusDot = document.getElementById('statusDot');
-    const statusText = document.getElementById('statusText');
-    const messagesDiv = document.getElementById('messages');
-    const msgInput = document.getElementById('msgInput');
-    const sendBtn = document.getElementById('sendBtn');
-    const emojiPanel = document.getElementById('emojiPanel');
-    const emojiBtn = document.getElementById('emojiBtn');
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const chatRoom = "global_chat";
 
-    let userId = localStorage.getItem('user_id') || 'user_' + Math.random().toString(36).substr(2,8);
-    localStorage.setItem('user_id', userId);
-    let chatId = prompt("Enter friend's ID or group ID:");
-    if (!chatId) chatId = 'default_chat';
+  // এলিমেন্টস
+  const loginDiv = document.getElementById('login');
+  const chatDiv = document.getElementById('chat');
+  const loginBtn = document.getElementById('loginBtn');
+  const loginError = document.getElementById('loginError');
+  const usernameInput = document.getElementById('username');
+  const passwordInput = document.getElementById('password');
+  const messagesDiv = document.getElementById('messages');
+  const msgInput = document.getElementById('msgInput');
+  const sendBtn = document.getElementById('sendBtn');
 
-    const statusRef = ref(db, 'status/' + userId);
-    const chatRef = ref(db, 'chats/' + chatId);
+  let currentUser = null;
 
-    set(statusRef, { state: 'online', lastSeen: Date.now() });
-    onDisconnect(statusRef).set({ state: 'offline', lastSeen: Date.now() });
+  loginBtn.onclick = () => {
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
 
-    onValue(ref(db, '.info/connected'), (snap) => {
-      if (snap.val()) {
-        statusDot.style.background = 'limegreen';
-        statusText.textContent = 'Online';
-      } else {
-        statusDot.style.background = 'gray';
-        statusText.textContent = 'Offline';
-      }
-    });
+    if (validUsers[username] && validUsers[username] === password) {
+      currentUser = username;
+      loginDiv.style.display = 'none';
+      chatDiv.style.display = 'flex';
+      loginError.textContent = '';
+      startChat();
+    } else {
+      loginError.textContent = 'Invalid username or password!';
+    }
+  };
 
-    sendBtn.onclick = () => {
-      const text = msgInput.value.trim();
-      if (!text) return;
-      const msgRef = push(chatRef);
-      set(msgRef, {
-        userId,
-        data: text,
-        timestamp: Date.now(),
-        seenBy: { [userId]: Date.now() }
-      });
-      msgInput.value = '';
-    };
+  function startChat() {
+    // Show existing messages and listen for new ones
+    const chatRef = ref(db, "chats/" + chatRoom);
 
-    onValue(chatRef, snap => {
+    onValue(chatRef, (snapshot) => {
       messagesDiv.innerHTML = '';
-      snap.forEach(child => {
+      snapshot.forEach(child => {
         const msg = child.val();
         const div = document.createElement('div');
-        div.className = 'msg ' + (msg.userId === userId ? 'me' : 'friend');
-        div.innerHTML = `${msg.data} <span class="seen">✔✔</span>`;
-        div.onclick = () => openMessageMenu(child.key, msg);
-        if (msg.userId !== userId) {
-          set(ref(db, `chats/${chatId}/${child.key}/seenBy/${userId}`), Date.now());
-          showNotification('New Message', msg.data);
-        }
+        div.classList.add('msg');
+        div.classList.add(msg.user === currentUser ? 'me' : 'other');
+        div.textContent = `${msg.user}: ${msg.text}`;
         messagesDiv.appendChild(div);
       });
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
 
-    function openMessageMenu(key, msg) {
-      if (msg.userId !== userId) return;
-      const action = prompt("Type 'edit' to edit or 'delete' to delete:");
-      if (action === 'edit') {
-        const newText = prompt("Enter new message:", msg.data);
-        if (newText !== null) {
-          update(ref(db, `chats/${chatId}/${key}`), { data: newText + " (edited)" });
-        }
-      }
-      if (action === 'delete') {
-        if (confirm("Are you sure you want to delete this message?")) {
-          set(ref(db, `chats/${chatId}/${key}`), null);
-        }
-      }
-    }
-
-    // Notification permission
-    if (Notification.permission !== 'granted') {
-      Notification.requestPermission();
-    }
-
-    function showNotification(title, body) {
-      if (document.hidden && Notification.permission === 'granted') {
-        new Notification(title, { body });
-      }
-    }
-
-    const emojiList = ["😀","😁","😂","🤣","😃","😄","😅","😆","😉","😊","😋","😎","😍","😘","🥰","😗","😙","😚","🙂","🤗","🤩","🤔","🤨","😐","😑","😶","🙄","😏","😣","😥","😮","🤐","😯","😪","😫","😴","😌","😛","😜","😝","🤤","😒","😓","😔","😕","🙃","🤑","😲","☹️","🙁","😖","😞","😟","😤","😢","😭","😦","😧","😨","😩","🤯","😬","😰","😱","🥵","🥶","😳","🤪","😵","😡","😠","🤬","😷","🤒","🤕","🤢","🤮","🤧","😇","🥳","🥴","🥺","🤠","🤡","🤥","🤫","🤭","🧐"];
-
-    emojiBtn.onclick = () => {
-      if (emojiPanel.style.display === 'none' || emojiPanel.style.display === '') {
-        emojiPanel.innerHTML = '';
-        emojiList.forEach(e => {
-          const span = document.createElement('span');
-          span.textContent = e;
-          span.onclick = () => {
-            msgInput.value += e;
-            msgInput.focus();
-          };
-          emojiPanel.appendChild(span);
-        });
-        emojiPanel.style.display = 'block';
-      } else {
-        emojiPanel.style.display = 'none';
-      }
+    sendBtn.onclick = () => {
+      const text = msgInput.value.trim();
+      if (!text) return;
+      const chatRefPush = ref(db, "chats/" + chatRoom);
+      push(chatRefPush, {
+        user: currentUser,
+        text: text,
+        timestamp: Date.now()
+      });
+      msgInput.value = '';
     };
+  }
+</script>
 
-    document.addEventListener('click', (e) => {
-      if (!emojiPanel.contains(e.target) && e.target !== emojiBtn) {
-        emojiPanel.style.display = 'none';
-      }
-    });
-  </script>
 </body>
 </html>
