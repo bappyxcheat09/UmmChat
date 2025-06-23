@@ -3,520 +3,517 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Mini Chat Login</title>
+<title>UmmChat Stylish Login & Chat</title>
 <style>
-    * {
-        box-sizing: border-box;
-    }
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: #121212;
-        color: #eee;
-        margin: 0; padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        overflow: hidden; /* Prevent scrollbars */
-    }
-    #login, #chat {
-        background: #1f1f1f;
-        width: 90vw;
-        max-width: 400px;
-        border-radius: 15px; /* Softer corners */
-        padding: 30px; /* More padding */
-        box-shadow: 0 10px 30px rgba(0, 211, 102, 0.2); /* Green glow shadow */
-        border: 1px solid rgba(37, 211, 102, 0.3); /* Subtle border */
-        transition: all 0.3s ease-in-out;
-    }
-    #chat {
-        display: none;
-        flex-direction: column;
-        height: 90vh;
-        max-height: 700px;
-    }
-    h2 {
-        margin-top: 0;
-        text-align: center;
-        font-weight: 700; /* Bolder heading */
-        color: #25d366;
-        text-shadow: 0 0 8px rgba(37, 211, 102, 0.7); /* Text glow */
-        margin-bottom: 25px;
-    }
-    input[type="text"],
-    input[type="password"] {
-        width: 100%;
-        padding: 14px 15px; /* More padding */
-        margin: 12px 0; /* Adjusted margin */
-        background: #2e2e2e; /* Darker input background */
-        border: none;
-        border-radius: 10px; /* Softer input corners */
-        color: #eee;
-        font-size: 16px;
-        transition: all 0.3s ease;
-        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3); /* Inner shadow */
-    }
-    input[type="text"]:focus,
-    input[type="password"]:focus {
-        background: #3a3a3a; /* Lighter on focus */
-        outline: none;
-        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5), 0 0 0 2px #25d366; /* Green border glow on focus */
-    }
-    button {
-        width: 100%;
-        background: #25d366;
-        border: none;
-        padding: 16px; /* More padding */
-        border-radius: 10px; /* Softer button corners */
-        font-weight: bold;
-        color: #121212;
-        font-size: 18px; /* Larger text */
-        cursor: pointer;
-        margin-top: 20px; /* More space */
-        transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-        box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4); /* Button shadow */
-    }
-    button:hover {
-        background: #1da851;
-        transform: translateY(-2px); /* Slight lift effect */
-        box-shadow: 0 7px 20px rgba(37, 211, 102, 0.6); /* Enhanced shadow on hover */
-    }
-    button:active {
-        transform: translateY(0);
-        box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
-    }
-    #loginError {
-        color: #ff6b6b; /* Softer error color */
-        text-align: center;
-        margin-top: 15px;
-        font-size: 15px;
-        font-weight: 500;
-    }
-    #messages {
-        flex: 1;
-        overflow-y: auto;
-        padding: 15px; /* More padding */
-        background: #2e2e2e; /* Darker message area */
-        border-radius: 12px; /* Softer corners */
-        margin-bottom: 15px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px; /* More space between messages */
-        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4); /* Inner shadow for depth */
-    }
-    .message-container {
-        display: flex;
-        align-items: flex-end;
-        gap: 10px; /* Space between pic and msg */
-    }
-    .msg {
-        padding: 12px 16px; /* More padding */
-        border-radius: 20px; /* More rounded */
-        max-width: 75%;
-        word-wrap: break-word;
-        position: relative;
-        font-size: 15px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Message shadow */
-    }
-    .msg .timestamp {
-        font-size: 11px; /* Slightly larger timestamp */
-        color: rgba(255, 255, 255, 0.6);
-        text-align: right;
-        margin-top: 8px; /* More space */
-        display: block;
-        line-height: 1; /* Compact line height */
-    }
-    .msg .status-icon {
-        font-size: 13px; /* Slightly larger icon */
-        margin-left: 6px; /* More space */
-        color: #9e9e9e; /* Default unseen grey */
-    }
-    .msg.seen .status-icon {
-        color: #34b7f1; /* WhatsApp blue for seen */
-        text-shadow: 0 0 3px rgba(52, 183, 241, 0.7); /* Subtle glow for seen */
-    }
-    .me {
-        background: linear-gradient(to right, #25d366, #1da851); /* Gradient for 'me' */
-        color: #121212;
-        margin-left: auto;
-        border-bottom-right-radius: 5px; /* Pointer effect */
-    }
-    .other {
-        background: #3a3a3a; /* Darker background for 'other' */
-        color: #eee;
-        margin-right: auto;
-        border-bottom-left-radius: 5px; /* Pointer effect */
-    }
-    .message-container.me {
-        justify-content: flex-end;
-    }
-    .profile-pic-chat {
-        width: 35px; /* Slightly larger */
-        height: 35px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid #25d366; /* Green border */
-        box-shadow: 0 0 8px rgba(37, 211, 102, 0.4); /* Glow effect */
-        flex-shrink: 0; /* Prevent shrinking */
-    }
-    .message-container.me .profile-pic-chat {
-        order: 2;
-        margin-left: 10px;
-    }
-    .message-container.other .profile-pic-chat {
-        order: 1;
-        margin-right: 10px;
-    }
-    #inputArea {
-        display: flex;
-        gap: 10px; /* More space */
-        align-items: center;
-        background: #1f1f1f; /* Match chat background */
-        padding: 10px; /* Padding for input area */
-        border-radius: 12px;
-        box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2); /* Shadow above input */
-    }
-    #msgInput {
-        flex: 1;
-        padding: 12px 18px; /* More padding */
-        border-radius: 25px; /* More rounded */
-        border: none;
-        font-size: 16px;
-        background: #2e2e2e;
-        color: #eee;
-        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
-    }
-    #msgInput:focus {
-        outline: none;
-        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5), 0 0 0 2px #25d366;
-    }
-    #sendBtn {
-        width: 50px; /* Fixed width for send button */
-        height: 50px; /* Fixed height */
-        padding: 0;
-        border-radius: 50%; /* Circular */
-        font-size: 24px; /* Larger icon */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-shrink: 0;
-        background: #25d366; /* Green */
-        color: #fff; /* White icon */
-        box-shadow: 0 3px 10px rgba(37, 211, 102, 0.4);
-    }
-    #sendBtn:hover {
-        background: #1da851;
-        transform: scale(1.05); /* Slightly enlarge on hover */
-    }
-    #profilePicInput {
-        display: block;
-        margin: 25px auto 15px; /* More space */
-        width: 100%;
-        border: 1px solid #25d366;
-        padding: 12px; /* More padding */
-        border-radius: 10px;
-        background: #222;
-        color: #eee;
-        cursor: pointer;
-        font-size: 15px;
-        text-align: center;
-    }
-    #profilePicPreview {
-        width: 120px; /* Larger preview */
-        height: 120px;
-        border-radius: 50%;
-        background-color: #333;
-        margin: 0 auto 30px; /* More space below */
-        display: block;
-        object-fit: cover;
-        border: 3px solid #25d366; /* Thicker border */
-        box-shadow: 0 0 15px rgba(37, 211, 102, 0.5); /* Stronger glow */
-    }
-    #typingIndicator {
-        font-size: 14px; /* Slightly larger */
-        color: #9e9e9e; /* Grey color */
-        margin-bottom: 10px;
-        height: 25px; /* Reserve space */
-        display: flex;
-        align-items: center;
-        padding-left: 10px;
-    }
-    .typing-animation span {
-        display: inline-block;
-        animation: typing-bounce 0.8s infinite ease-in-out;
-        opacity: 0.5; /* Always slightly visible */
-        font-weight: bold;
-        color: #25d366; /* Green dots */
-    }
-    .typing-animation span:nth-child(1) { animation-delay: 0s; }
-    .typing-animation span:nth-child(2) { animation-delay: 0.15s; } /* Faster delay */
-    .typing-animation span:nth-child(3) { animation-delay: 0.3s; }
-
-    @keyframes typing-bounce {
-        0%, 100% { transform: translateY(0); opacity: 0.5; }
-        50% { transform: translateY(-4px); opacity: 1; }
-    }
+  /* --- Basic Reset --- */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #121212;
+    color: #eee;
+    margin: 0; padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+  #login, #chat {
+    background: #1f1f1f;
+    width: 90vw;
+    max-width: 400px;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 211, 102, 0.25);
+    border: 1px solid rgba(37, 211, 102, 0.3);
+    transition: all 0.3s ease-in-out;
+  }
+  #chat {
+    display: none;
+    flex-direction: column;
+    height: 90vh;
+    max-height: 700px;
+  }
+  h2 {
+    margin-top: 0;
+    text-align: center;
+    font-weight: 700;
+    color: #25d366;
+    text-shadow: 0 0 8px rgba(37, 211, 102, 0.7);
+    margin-bottom: 25px;
+  }
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 14px 15px;
+    margin: 12px 0;
+    background: #2e2e2e;
+    border: none;
+    border-radius: 10px;
+    color: #eee;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
+  input[type="text"]:focus,
+  input[type="password"]:focus {
+    background: #3a3a3a;
+    outline: none;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5), 0 0 0 2px #25d366;
+  }
+  button {
+    width: 100%;
+    background: #25d366;
+    border: none;
+    padding: 16px;
+    border-radius: 10px;
+    font-weight: bold;
+    color: #121212;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+  }
+  button:hover {
+    background: #1da851;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px rgba(37, 211, 102, 0.6);
+  }
+  button:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
+  }
+  #loginError {
+    color: #ff6b6b;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  #messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    background: #2e2e2e;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+  }
+  .message-container {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+  }
+  .msg {
+    padding: 12px 16px;
+    border-radius: 20px;
+    max-width: 75%;
+    word-wrap: break-word;
+    position: relative;
+    font-size: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  .msg .timestamp {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+    text-align: right;
+    margin-top: 8px;
+    display: block;
+    line-height: 1;
+  }
+  .msg .status-icon {
+    font-size: 13px;
+    margin-left: 6px;
+    color: #9e9e9e;
+  }
+  .msg.seen .status-icon {
+    color: #34b7f1;
+    text-shadow: 0 0 3px rgba(52, 183, 241, 0.7);
+  }
+  .me {
+    background: linear-gradient(to right, #25d366, #1da851);
+    color: #121212;
+    margin-left: auto;
+    border-bottom-right-radius: 5px;
+  }
+  .other {
+    background: #3a3a3a;
+    color: #eee;
+    margin-right: auto;
+    border-bottom-left-radius: 5px;
+  }
+  .message-container.me {
+    justify-content: flex-end;
+  }
+  .profile-pic-chat {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #25d366;
+    box-shadow: 0 0 8px rgba(37, 211, 102, 0.4);
+    flex-shrink: 0;
+  }
+  .message-container.me .profile-pic-chat {
+    order: 2;
+    margin-left: 10px;
+  }
+  .message-container.other .profile-pic-chat {
+    order: 1;
+    margin-right: 10px;
+  }
+  #inputArea {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: #1f1f1f;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2);
+  }
+  #msgInput {
+    flex: 1;
+    padding: 12px 18px;
+    border-radius: 25px;
+    border: none;
+    font-size: 16px;
+    background: #2e2e2e;
+    color: #eee;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
+  #msgInput:focus {
+    outline: none;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5), 0 0 0 2px #25d366;
+  }
+  #sendBtn {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    background: #25d366;
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(37, 211, 102, 0.4);
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  #sendBtn:hover {
+    background: #1da851;
+    transform: scale(1.05);
+  }
+  #profilePicInput {
+    display: block;
+    margin: 25px auto 15px;
+    width: 100%;
+    border: 1px solid #25d366;
+    padding: 12px;
+    border-radius: 10px;
+    background: #222;
+    color: #eee;
+    cursor: pointer;
+    font-size: 15px;
+    text-align: center;
+  }
+  #profilePicPreview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #333;
+    margin: 0 auto 30px;
+    display: block;
+    object-fit: cover;
+    border: 3px solid #25d366;
+    box-shadow: 0 0 15px rgba(37, 211, 102, 0.5);
+  }
+  #typingIndicator {
+    font-size: 14px;
+    color: #9e9e9e;
+    margin-bottom: 10px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+  }
+  .typing-animation span {
+    display: inline-block;
+    animation: typing-bounce 0.8s infinite ease-in-out;
+    opacity: 0.5;
+    font-weight: bold;
+    color: #25d366;
+  }
+  .typing-animation span:nth-child(1) { animation-delay: 0s; }
+  .typing-animation span:nth-child(2) { animation-delay: 0.15s; }
+  .typing-animation span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes typing-bounce {
+    0%, 100% { transform: translateY(0); opacity: 0.5; }
+    50% { transform: translateY(-4px); opacity: 1; }
+  }
 </style>
 </head>
 <body>
 
 <div id="login">
-    <h2>Login to Chat</h2>
-    <img id="profilePicPreview" src="https://via.placeholder.com/120/333333/FFFFFF?text=+" alt="Profile Preview" />
-    <input type="file" id="profilePicInput" accept="image/*" />
-    <input type="text" id="username" placeholder="Username" autocomplete="off" />
-    <input type="password" id="password" placeholder="Password" autocomplete="off" />
-    <button id="loginBtn">Login</button>
-    <div id="loginError"></div>
+  <h2>Login to Chat</h2>
+  <img id="profilePicPreview" src="https://via.placeholder.com/120/333333/FFFFFF?text=+" alt="Profile Preview" />
+  <input type="file" id="profilePicInput" accept="image/*" />
+  <input type="text" id="username" placeholder="Username" autocomplete="off" />
+  <input type="password" id="password" placeholder="Password" autocomplete="off" />
+  <button id="loginBtn">Login</button>
+  <div id="loginError"></div>
 </div>
 
 <div id="chat">
-    <h2>Global Chat</h2>
-    <div id="typingIndicator"></div>
-    <div id="messages"></div>
-    <div id="inputArea">
-        <input id="msgInput" type="text" placeholder="Type a message..." autocomplete="off" />
-        <button id="sendBtn">&#x27A4;</button> </div>
+  <h2>Global Chat</h2>
+  <div id="typingIndicator"></div>
+  <div id="messages"></div>
+  <div id="inputArea">
+    <input id="msgInput" type="text" placeholder="Type a message..." autocomplete="off" />
+    <button id="sendBtn">&#x27A4;</button>
+  </div>
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-    import { getDatabase, ref, push, onValue, set, update } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
-    import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-storage.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+  import { getDatabase, ref, push, onValue, set, update } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+  import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-storage.js";
 
-    // ফিক্সড ইউজারনেম ও পাসওয়ার্ড
-    const validUsers = {
-        "bappy": "1234",
-        "user1": "abcd"
-    };
+  const validUsers = {
+    "bappy": "1234",
+    "user1": "abcd"
+  };
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyAxb8vACQClmiEsB886aaHFMAitu0wEVQo",
-        authDomain: "ummchat009.firebaseapp.com",
-        databaseURL: "https://ummchat009-default-rtdb.firebaseio.com/",
-        projectId: "ummchat009",
-        storageBucket: "ummchat009.appspot.com",
-        messagingSenderId: "880860486384",
-        appId: "1:880860486384:web:85ce4f7ccb70eb1c5f8035"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyAxb8vACQClmiEsB886aaHFMAitu0wEVQo",
+    authDomain: "ummchat009.firebaseapp.com",
+    databaseURL: "https://ummchat009-default-rtdb.firebaseio.com/",
+    projectId: "ummchat009",
+    storageBucket: "ummchat009.appspot.com",
+    messagingSenderId: "880860486384",
+    appId: "1:880860486384:web:85ce4f7ccb70eb1c5f8035"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const storage = getStorage(app);
-    const chatRoom = "global_chat";
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const storage = getStorage(app);
+  const chatRoom = "global_chat";
 
-    // এলিমেন্টস
-    const loginDiv = document.getElementById('login');
-    const chatDiv = document.getElementById('chat');
-    const loginBtn = document.getElementById('loginBtn');
-    const loginError = document.getElementById('loginError');
-    const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
-    const messagesDiv = document.getElementById('messages');
-    const msgInput = document.getElementById('msgInput');
-    const sendBtn = document.getElementById('sendBtn');
-    const profilePicInput = document.getElementById('profilePicInput');
-    const profilePicPreview = document.getElementById('profilePicPreview');
-    const typingIndicator = document.getElementById('typingIndicator');
+  const loginDiv = document.getElementById('login');
+  const chatDiv = document.getElementById('chat');
+  const loginBtn = document.getElementById('loginBtn');
+  const loginError = document.getElementById('loginError');
+  const usernameInput = document.getElementById('username');
+  const passwordInput = document.getElementById('password');
+  const messagesDiv = document.getElementById('messages');
+  const msgInput = document.getElementById('msgInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const profilePicInput = document.getElementById('profilePicInput');
+  const profilePicPreview = document.getElementById('profilePicPreview');
+  const typingIndicator = document.getElementById('typingIndicator');
 
-    let currentUser = null;
-    let currentUserProfilePic = null;
-    let selectedFile = null;
+  let currentUser = null;
+  let currentUserProfilePic = null;
+  let selectedFile = null;
 
-    // Profile picture preview
-    profilePicInput.addEventListener('change', (event) => {
-        selectedFile = event.target.files[0];
-        if (selectedFile) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                profilePicPreview.src = e.target.result;
-            };
-            reader.readAsDataURL(selectedFile);
-        } else {
-            profilePicPreview.src = "https://via.placeholder.com/120/333333/FFFFFF?text=+";
+  profilePicInput.addEventListener('change', (event) => {
+    selectedFile = event.target.files[0];
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        profilePicPreview.src = e.target.result;
+      };
+      reader.readAsDataURL(selectedFile);
+    } else {
+      profilePicPreview.src = "https://via.placeholder.com/120/333333/FFFFFF?text=+";
+    }
+  });
+
+  loginBtn.onclick = async () => {
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (!selectedFile) {
+      loginError.textContent = 'Please select a profile picture!';
+      return;
+    }
+
+    if (!username || !password) {
+      loginError.textContent = 'Please enter username and password!';
+      return;
+    }
+
+    if (validUsers[username] && validUsers[username] === password) {
+      currentUser = username;
+      loginError.textContent = 'Uploading profile picture...';
+
+      try {
+        const fileRef = storageRef(storage, `profile_pics/${currentUser}`);
+        await uploadBytes(fileRef, selectedFile);
+        currentUserProfilePic = await getDownloadURL(fileRef);
+
+        await set(ref(db, `users/${currentUser}/profilePic`), currentUserProfilePic);
+
+        loginDiv.style.display = 'none';
+        chatDiv.style.display = 'flex';
+        loginError.textContent = '';
+        startChat();
+      } catch (error) {
+        console.error("Upload error:", error);
+        loginError.textContent = 'Failed to upload profile picture. Try again.';
+      }
+
+    } else {
+      loginError.textContent = 'Invalid username or password!';
+    }
+  };
+
+  function startChat() {
+    const chatRef = ref(db, "chats/" + chatRoom);
+    const usersRef = ref(db, "users");
+
+    onValue(chatRef, async (snapshot) => {
+      messagesDiv.innerHTML = '';
+      const messages = [];
+      snapshot.forEach(child => {
+        messages.push({ key: child.key, ...child.val() });
+      });
+
+      const usersSnapshot = await new Promise(resolve => onValue(usersRef, resolve, { onlyOnce: true }));
+      const userProfilePics = {};
+      usersSnapshot.forEach(child => {
+        userProfilePics[child.key] = child.val().profilePic || "https://via.placeholder.com/120/333333/FFFFFF?text=+";
+      });
+
+      messages.forEach(msg => {
+        const messageContainer = document.createElement('div');
+        messageContainer.classList.add('message-container');
+        messageContainer.classList.add(msg.user === currentUser ? 'me' : 'other');
+
+        const profilePicElement = document.createElement('img');
+        profilePicElement.classList.add('profile-pic-chat');
+        profilePicElement.src = userProfilePics[msg.user] || "https://via.placeholder.com/120/333333/FFFFFF?text=+";
+        profilePicElement.alt = "Profile Pic";
+
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('msg');
+
+        if (msg.user !== currentUser) {
+          const usernameSpan = document.createElement('span');
+          usernameSpan.style.fontWeight = 'bold';
+          usernameSpan.style.marginRight = '5px';
+          usernameSpan.textContent = `${msg.user}:`;
+          msgDiv.appendChild(usernameSpan);
         }
+
+        msgDiv.innerHTML += msg.text;
+
+        const timestampSpan = document.createElement('span');
+        timestampSpan.classList.add('timestamp');
+        timestampSpan.textContent = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        const statusIcon = document.createElement('span');
+        statusIcon.classList.add('status-icon');
+        statusIcon.innerHTML = msg.seen ? '&#10003;&#10003;' : '&#10003;';
+        if (msg.seen) {
+          statusIcon.classList.add('seen');
+        }
+        timestampSpan.appendChild(statusIcon);
+        msgDiv.appendChild(timestampSpan);
+
+        if (msg.user === currentUser) {
+          messageContainer.appendChild(msgDiv);
+          messageContainer.appendChild(profilePicElement);
+        } else {
+          messageContainer.appendChild(profilePicElement);
+          messageContainer.appendChild(msgDiv);
+        }
+        messagesDiv.appendChild(messageContainer);
+      });
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
 
-    loginBtn.onclick = async () => {
-        const username = usernameInput.value.trim();
-        const password = passwordInput.value.trim();
+    const typingRef = ref(db, `typing_status/${chatRoom}`);
+    onValue(typingRef, (snapshot) => {
+      const typingUsers = snapshot.val() || {};
+      const otherTypingUsers = Object.keys(typingUsers).filter(user => user !== currentUser && typingUsers[user] === true);
 
-        if (!selectedFile) {
-            loginError.textContent = 'Please select a profile picture!';
-            return;
-        }
-
-        if (validUsers[username] && validUsers[username] === password) {
-            currentUser = username;
-            loginError.textContent = '';
-            
-            // Upload profile picture
-            const fileRef = storageRef(storage, `profile_pics/${currentUser}`);
-            try {
-                await uploadBytes(fileRef, selectedFile);
-                currentUserProfilePic = await getDownloadURL(fileRef);
-                
-                // Save profile pic URL to database
-                await set(ref(db, `users/${currentUser}/profilePic`), currentUserProfilePic);
-
-                loginDiv.style.display = 'none';
-                chatDiv.style.display = 'flex';
-                startChat();
-            } catch (error) {
-                console.error("Error uploading profile picture:", error);
-                loginError.textContent = 'Failed to upload profile picture. Please try again.';
-            }
-
+      if (otherTypingUsers.length > 0) {
+        let typingText = '';
+        if (otherTypingUsers.length === 1) {
+          typingText = `${otherTypingUsers[0]} is typing`;
+        } else if (otherTypingUsers.length === 2) {
+          typingText = `${otherTypingUsers[0]} and ${otherTypingUsers[1]} are typing`;
         } else {
-            loginError.textContent = 'Invalid username or password!';
+          typingText = `Multiple users are typing`;
         }
+        typingIndicator.innerHTML = `${typingText}<span class="typing-animation"><span>.</span><span>.</span><span>.</span></span>`;
+      } else {
+        typingIndicator.innerHTML = '';
+      }
+    });
+
+    sendBtn.onclick = () => {
+      const text = msgInput.value.trim();
+      if (!text) return;
+      const chatRefPush = ref(db, "chats/" + chatRoom);
+      push(chatRefPush, {
+        user: currentUser,
+        profilePic: currentUserProfilePic,
+        text: text,
+        timestamp: Date.now(),
+        seen: false
+      });
+      msgInput.value = '';
+      update(ref(db, `typing_status/${chatRoom}/${currentUser}`), false);
     };
 
-    function startChat() {
+    let typingTimeout;
+    msgInput.addEventListener('input', () => {
+      update(ref(db, `typing_status/${chatRoom}/${currentUser}`), true);
+      clearTimeout(typingTimeout);
+      typingTimeout = setTimeout(() => {
+        update(ref(db, `typing_status/${chatRoom}/${currentUser}`), false);
+      }, 3000);
+    });
+
+    // Mark messages as seen when chat active
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && currentUser) {
         const chatRef = ref(db, "chats/" + chatRoom);
-        const usersRef = ref(db, "users");
-
-        // Listen for new messages
-        onValue(chatRef, async (snapshot) => {
-            messagesDiv.innerHTML = '';
-            const messages = [];
-            snapshot.forEach(child => {
-                messages.push({ key: child.key, ...child.val() }); // Include key for updating seen status
-            });
-
-            // Fetch all user profile pictures once
-            const usersSnapshot = await new Promise(resolve => onValue(usersRef, resolve, { onlyOnce: true }));
-            const userProfilePics = {};
-            usersSnapshot.forEach(child => {
-                userProfilePics[child.key] = child.val().profilePic || "https://via.placeholder.com/120/333333/FFFFFF?text=+"; // Default if no pic
-            });
-
-            messages.forEach(msg => {
-                const messageContainer = document.createElement('div');
-                messageContainer.classList.add('message-container');
-                messageContainer.classList.add(msg.user === currentUser ? 'me' : 'other');
-
-                const profilePicElement = document.createElement('img');
-                profilePicElement.classList.add('profile-pic-chat');
-                profilePicElement.src = userProfilePics[msg.user] || "https://via.placeholder.com/120/333333/FFFFFF?text=+";
-                profilePicElement.alt = "Profile Pic";
-
-                const msgDiv = document.createElement('div');
-                msgDiv.classList.add('msg');
-                
-                // Add username only for 'other' messages
-                if (msg.user !== currentUser) {
-                    const usernameSpan = document.createElement('span');
-                    usernameSpan.style.fontWeight = 'bold';
-                    usernameSpan.style.marginRight = '5px';
-                    usernameSpan.textContent = `${msg.user}:`;
-                    msgDiv.appendChild(usernameSpan);
-                }
-
-                msgDiv.innerHTML += msg.text;
-
-                const timestampSpan = document.createElement('span');
-                timestampSpan.classList.add('timestamp');
-                timestampSpan.textContent = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                
-                const statusIcon = document.createElement('span');
-                statusIcon.classList.add('status-icon');
-                statusIcon.innerHTML = msg.seen ? '&#10003;&#10003;' : '&#10003;'; // Double checkmark for seen, single for sent
-                if (msg.seen) {
-                    statusIcon.classList.add('seen');
-                }
-                timestampSpan.appendChild(statusIcon);
-                msgDiv.appendChild(timestampSpan);
-
-
-                if (msg.user === currentUser) {
-                    messageContainer.appendChild(msgDiv);
-                    messageContainer.appendChild(profilePicElement);
-                } else {
-                    messageContainer.appendChild(profilePicElement);
-                    messageContainer.appendChild(msgDiv);
-                }
-                messagesDiv.appendChild(messageContainer);
-            });
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        });
-
-        // Listen for typing status
-        const typingRef = ref(db, `typing_status/${chatRoom}`);
-        onValue(typingRef, (snapshot) => {
-            const typingUsers = snapshot.val() || {};
-            const otherTypingUsers = Object.keys(typingUsers).filter(user => user !== currentUser && typingUsers[user] === true);
-
-            if (otherTypingUsers.length > 0) {
-                let typingText = '';
-                if (otherTypingUsers.length === 1) {
-                    typingText = `${otherTypingUsers[0]} is typing`;
-                } else if (otherTypingUsers.length === 2) {
-                    typingText = `${otherTypingUsers[0]} and ${otherTypingUsers[1]} are typing`;
-                } else {
-                    typingText = `Multiple users are typing`;
-                }
-                typingIndicator.innerHTML = `${typingText}<span class="typing-animation"><span>.</span><span>.</span><span>.</span></span>`;
-            } else {
-                typingIndicator.innerHTML = '';
+        onValue(chatRef, (snapshot) => {
+          snapshot.forEach(child => {
+            const msg = child.val();
+            if (msg.user !== currentUser && !msg.seen) {
+              update(ref(db, `chats/${chatRoom}/${child.key}`), { seen: true });
             }
+          });
+        }, { onlyOnce: true });
+      }
+    });
+
+    // Initial mark as seen if visible
+    if (currentUser) {
+      const chatRef = ref(db, "chats/" + chatRoom);
+      onValue(chatRef, (snapshot) => {
+        snapshot.forEach(child => {
+          const msg = child.val();
+          if (msg.user !== currentUser && !msg.seen) {
+            update(ref(db, `chats/${chatRoom}/${child.key}`), { seen: true });
+          }
         });
-
-        sendBtn.onclick = () => {
-            const text = msgInput.value.trim();
-            if (!text) return;
-            const chatRefPush = ref(db, "chats/" + chatRoom);
-            push(chatRefPush, {
-                user: currentUser,
-                profilePic: currentUserProfilePic,
-                text: text,
-                timestamp: Date.now(),
-                seen: false // Initialize as unseen
-            });
-            msgInput.value = '';
-            update(ref(db, `typing_status/${chatRoom}/${currentUser}`), false); // Stop typing after sending
-        };
-
-        // Typing indicator logic
-        let typingTimeout;
-        msgInput.addEventListener('input', () => {
-            update(ref(db, `typing_status/${chatRoom}/${currentUser}`), true);
-
-            clearTimeout(typingTimeout);
-            typingTimeout = setTimeout(() => {
-                update(ref(db, `typing_status/${chatRoom}/${currentUser}`), false);
-            }, 3000); // 3 seconds after last keystroke
-        });
-
-        // Mark messages as seen when the chat window is active
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible' && currentUser) {
-                const chatRef = ref(db, "chats/" + chatRoom);
-                onValue(chatRef, (snapshot) => {
-                    snapshot.forEach(child => {
-                        const msg = child.val();
-                        // Only mark as seen if it's not our own message and it hasn't been seen yet
-                        if (msg.user !== currentUser && !msg.seen) {
-                            update(ref(db, `chats/${chatRoom}/${child.key}`), { seen: true });
-                        }
-                    });
-                }, { onlyOnce: true }); // Only run once when chat becomes visible
-            }
-        });
-
-        // Initial mark as seen if already visible on page load
-        if (currentUser) {
-            const chatRef = ref(db, "chats/" + chatRoom);
-            onValue(chatRef, (snapshot) => {
-                snapshot.forEach(child => {
-                    const msg = child.val();
-                    if (msg.user !== currentUser && !msg.seen) {
-                        update(ref(db, `chats/${chatRoom}/${child.key}`), { seen: true });
-                    }
-                });
-            }, { onlyOnce: true });
-        }
+      }, { onlyOnce: true });
     }
+  }
 </script>
 
 </body>
