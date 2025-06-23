@@ -26,10 +26,9 @@
   #login {
     background: linear-gradient(135deg, #2a2a2a, #1a1a1a); /* Subtle dark gradient */
     width: 90vw;
-    max-width: 380px; /* Slightly smaller for professionalism */
+    max-width: 320px; /* Reduced from 380px */
     border-radius: 15px; /* More rounded */
     padding: 30px; /* More padding */
-    /* Updated: Pink border and shadow for login */
     border: 1px solid #ff69b4; /* Light pink border */
     box-shadow: 0 8px 30px rgba(255, 105, 180, 0.4); /* Pink glow shadow */
     animation: fadeIn 0.7s ease-out forwards; /* Slightly slower fade-in */
@@ -122,8 +121,8 @@
     flex-direction: column;
     width: 100vw; /* Occupy full width on mobile */
     height: 100vh; /* Occupy full height on mobile */
-    max-width: 550px; /* Slightly smaller max width for desktop screens */
-    max-height: 750px; /* Slightly smaller max height for desktop screens */
+    max-width: 450px; /* Reduced from 550px */
+    max-height: 750px; /* Height remains same */
     background-color: #1a1a1a; /* Darker background for the chat window itself */
     border-radius: 0; /* No border-radius for full screen */
     box-shadow: none; /* No shadow for full screen */
@@ -134,7 +133,6 @@
   @media (min-width: 600px) { /* Apply border-radius and shadow for larger screens */
     #chat {
       border-radius: 12px;
-      /* Updated: Pink border and shadow for chat on larger screens */
       border: 1px solid #ff69b4; /* Light pink border */
       box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4); /* Pink glow shadow */
     }
@@ -243,7 +241,7 @@
     box-shadow: 0 0 0 2px #ff69b4;
   }
 
-  .emoji-button, #sendBtn {
+  #sendBtn { /* Only sendBtn, emoji-button removed */
     width: 48px;
     height: 48px;
     padding: 0;
@@ -261,14 +259,8 @@
     color: #fff;
     transition: background 0.2s ease-in-out;
   }
-  .emoji-button:hover, #sendBtn:hover {
+  #sendBtn:hover {
     background: #e652a2; /* Darker pink on hover */
-  }
-
-  .emoji-button::before {
-    content: '😊';
-    font-size: 22px;
-    line-height: 1;
   }
 
   #sendBtn::before {
@@ -279,45 +271,8 @@
     transform: rotate(45deg) translateY(-2px) translateX(2px);
   }
 
-  /* Emoji Picker Styles */
-  #emojiPickerContainer {
-    position: absolute;
-    bottom: 70px;
-    left: 15px;
-    right: 15px;
-    background-color: #2c3e50;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-    padding: 10px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(30px, 1fr));
-    gap: 5px;
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 10;
-    opacity: 0;
-    transform: translateY(20px);
-    visibility: hidden;
-    transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0.2s;
-  }
-
-  #emojiPickerContainer.show {
-    opacity: 1;
-    transform: translateY(0);
-    visibility: visible;
-  }
-
-  .emoji-item {
-    font-size: 22px;
-    cursor: pointer;
-    text-align: center;
-    padding: 5px;
-    border-radius: 5px;
-    transition: background-color 0.1s ease;
-  }
-  .emoji-item:hover {
-    background-color: #34495e;
-  }
+  /* Emoji Picker Styles removed */
+  /* #emojiPickerContainer and .emoji-item styles are no longer needed */
 </style>
 </head>
 <body>
@@ -332,15 +287,13 @@
 
 <div id="chat">
   <div class="chat-header">
-    <h2 class="glowing-title">BAPPY AND NABILAS CHATS</h2>
+    <h2 class="glowing-title">BAPPY AND NABILA HIDDEN CHATS</h2>
   </div>
   <div id="messages"></div>
   <div id="inputArea">
-    <button class="emoji-button" id="toggleEmojiPicker"></button>
     <textarea id="msgInput" placeholder="Type a message..." autocomplete="off" rows="1"></textarea>
     <button id="sendBtn"></button>
-    <div id="emojiPickerContainer"></div>
-  </div>
+    </div>
 </div>
 
 <script type="module">
@@ -379,17 +332,15 @@
   const messagesDiv = document.getElementById('messages');
   const msgInput = document.getElementById('msgInput');
   const sendBtn = document.getElementById('sendBtn');
-  const toggleEmojiPickerBtn = document.getElementById('toggleEmojiPicker');
-  const emojiPickerContainer = document.getElementById('emojiPickerContainer');
+  // Removed: toggleEmojiPickerBtn and emojiPickerContainer elements
+  // const toggleEmojiPickerBtn = document.getElementById('toggleEmojiPicker');
+  // const emojiPickerContainer = document.getElementById('emojiPickerContainer');
 
   let currentUser = null;
   const LOCAL_STORAGE_USERNAME_KEY = 'chatAppUsername';
 
-  // --- Emoji Data (Expanded) ---
-  const emojis = [
-    '😀', '😁', '😂', '🤣', '😃', '😄', '😅', '😆', '😉', '😊', '😋', '😎', '😍', '😘', '😗', '😙', '😚', '🤗', '🤔', '🤨', '😐', '😑', '😶', '😏', '😒', '🙄', '😬', '🤥', '😌', '😔', '😪', '🤤', '😴', '😷', '🤒', '🤕', '🤢', '🤮', '🤧', '🥵', '🥶', '😵', '🤯', '🤠', '🥳', '😎', '🤓', '🧐', '😕', '😟', '🙁', '😮', '😯', '😲', '😳', '🥺', '😦', '😧', '😨', '😩', '😫', '😤', '😠', '😡', '🤬', '😈', '👿', '💀', '☠️', '💩', '🤡', '👹', '👺', '👻', '👽', '👾', '🤖', '😺', '😸', '😹', '😻', '😼', '😽', '🙀', '😿', '😾', '👋', '🤚', '🖐️', '✋', '🖖', '👌', '🤏', '✌️', '🤞', '🤟', '🤘', '🤙', '👈', '👉', '👆', '🖕', '👇', '☝️', '👍', '👎', '✊', '👊', '🤛', '🤜', '👏', '🙌', '👐', '🤲', '🤝', '🙏', '✍️', '💅', '🤳', '💪', '🦵', '🦶', '👂', '👃', '🧠', '🦷', '🦴', '👀', '👁️', '👅', '👄', '💋', '❤️', '🧡', '💛', '💚', '💙', '💜', '🤎', '🖤', '🤍', '💔', '❣️', '💕', '💞', '💗', '💖', '💘', '💓', '🧡', '💛', '💚', '💙', '💜', '🤎', '🖤', '🤍', '💌', '💥', '💫', '💥', '✨', '🌟', '💫', '🔥', '💯', '🌈', '☀️', '☔', '☁️', '❄️', '☃️', '⚡', '💧', '🌊', '💨', '🌀', '🌎', '🌍', '🌏', '🌕', '🌖', '🌗', '🌘', '🌑', '🌒', '🌓', '🌔', '🌙', '⭐', '🌟', '💫', '✨', '☄️', '🚀', '🛸', '🛰️', '💡', '🔦', '🔋', '🔌', '💻', '🖥️', '⌨️', '🖱️', '🖨️', '📱', '📞', '☎️', '📟', '📠', '📺', '📻', '🎙️', '🎚️', '🎛️', '🎤', '🎧', '🎼', '🎵', '🎶', '🎷', '🎺', '🎸', '🎹', '🎻', '🥁', '🎬', '🎥', '📸', '📹', '💡', '📓', '📔', '📒', '📚', '📖', '🔖', '🏷️', '💰', '💳', '💎', '📈', '📉', '📊', '🔔', '🔕', '📢', '📣', '💬', '💭', '🫂', '🚶‍♀️', '🚶‍♂️', '🏃‍♀️', '🏃‍♂️', '💃', '🕺', '👨‍👩‍👧‍👦', '👨‍👩‍👧', '👩‍👩‍👧', '👨‍👨‍👧', '👨‍👩‍👦‍👦', '👨‍👨‍👦‍👦', '👩‍👩‍👦‍👦', '👨‍👩‍👧‍👦', '👨‍👩‍👧‍👧', '👩‍👩‍👧‍👧', '👨‍👨‍👧‍👧', '👨‍👩‍👦', '👩‍👩‍👦', '👨‍👨‍👦', '👥', '🧑‍🤝‍🧑', '🫂', '🏡', '🏠', '🏘️', '🏢', '🏗️', '🏭', '⛪', '🕌', '🛕', '🕍', '⛩️', '🏬', '🏪', '🏫', '🎡', '🎢', '🎠', '⛲', '🗼', '🗽', '🏛️', '⛰️', '🗻', '🏕️', '🏖️', '🏜️', '🏝️', '🏞️', '🛣️', '🛤️', '🚂', '🚃', '🚄', '🚅', '🚆', '🚇', '🚈', '🚉', '🚊', '🚗', '🚘', '🚌', '🚍', '🚎', '🚐', '🚑', '🚒', '🚓', '🚔', '🚕', '🚖', '🚗', '🚙', '🚚', '🚛', '🚜', '🛵', '🚲', '🛴', '🛹', '🛺', '✈️', '🛫', '🛬', '💺', '🚁', '🚟', '🚠', '🚡', '🚢', '🛥️', '🚤', '⛵', '🛶', '⛴️', '🛳️', '⚓', '🌠', '🎇', '🎆', '🎑', '🌅', '🌄', '🌆', '🌃', '🌉', '🌁', '⌚', '📱', '💻', '🖥️', '⌨️', '🖱️', '🖨️', '💾', '💿', '📀', '💽', '📼', '📷', '📸', '📹', '🎥', '📞', '☎️', '📟', '📠', '📺', '📻', '🎙️', '🎚️', '🎛️', '🎤', '🎧', '🎼', '🎵', '🎶', '🎷', '🎺', '🎸', '🎹', '🎻', '🥁', '🎬', '🎥', '📸', '📹', '📞', '☎️', '📟', '📠', '📺', '📻', '🎙️', '🎚️', '🎛️', '🎤', '🎧', '🎼', '🎵', '🎶', '🎷', '🎺', '🎸', '🎹', '🎻', '🥁', '🎯', '🎳', '🎱', '🎲', '♟️', '🎮', '🎰', '🧩', '🏆', '🏅', '🥇', '🥈', '🥉', '⚽', '⚾', '🥎', '🏀', '🏐', '🏈', '🏉', '🎾', '🥏', '🪃', '🏏', '🏑', '🏒', '🥍', '🏓', '🏸', '🥊', '🥋', '🥅', '⛳', '⛸️', '🎣', '🤿', '🎽', '🎿', '🛷', '🥌', '🪢', '🪁', '🛼', '🤿', '🤼‍♀️', '🤼‍♂️', '🤸‍♀️', '🤸‍♂️', '⛹️‍♀️', '⛹️‍♂️', '🤾‍♀️', '🤾‍♂️', '🤺', '🏋️‍♀️', '🏋️‍♂️', '🧘‍♀️', '🧘‍♂️', '🛀', '🛌', '🛋️', '🪑', '🚽', '🚿', '🛁', '🧼', '🪥', '🪒', '🧺', '🧻', '🚽', '🧹', '🪣', '🧴', '🧽', '🧼', '🧺', '🪣', '🧴', '🧽', '🗝️', '🔑', '🚪', '🪞', '🪟', '🛏️', '🪟', '🪑', '🚽', '🚿', '🛁', '🧼', '🪥', '🪒', '🧺', '🧻', '🚽', '🧹', '🪣', '🧴', '🧽', '🍎', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🍈', '🍒', '🍑', '🥭', '🍍', '🥥', '🥝', '🍅', '🍆', '🥑', '🥦', '🥬', '🥒', '🌶️', '🌽', '🥕', '🥔', '🍠', '🥐', '🍞', '🥖', '🥨', '🥯', '🥞', '🧇', '🧀', '🍖', '🍗', '🥩', '🥓', '🍔', '🍟', '🍕', '🌭', '🥪', '🌮', '🌯', '🥙', '🧆', '🥚', '🍳', '🍲', '🥣', '🥗', '🍿', '🧈', '🧂', '🥫', '🍱', '🍘', '🍙', '🍚', '🍛', '🍜', '🍝', '🍠', '🍢', '🍣', '🍤', '🍥', '🥮', '🍡', '🥟', '🥠', '🥡', '🍦', '🍧', '🍨', '🍩', '🍪', '🎂', '🍰', '🧁', '🥧', '🍫', '🍬', '🍭', '🍮', '🍯', '🍼', '🥛', '☕', '🍵', '🍶', '🍾', '🍷', '🍸', '🍹', '🍺', '🍻', '🥂', '🥃', '🥤', '🧉', '🧊', '🥄', '🍴', '🍽️', '🥣', '🥡', '🥢', '🍚', '🥫', '🍿', '🧊', '🧉', '🥤', '🥃', '🥂', '🍻', '🍺', '🍹', '🍸', '🍷', '🍾', '🍶', '🍵', '☕', '🥛', '🍼', '🍯', '🍮', '🍭', '🍬', '🍫', '🥧', '🧁', '🍰', '🎂', '🍪', '🍩', '🍨', '🍧', '🍦', '🥡', '🥠', '🥟', '🍡', '🥮', '🍥', '🍤', '🍣', '🍢', '🍠', '🍝', '🍜', '🍛', '🍚', '🍙', '🍘', '🍱', '🥫', '🧂', '🧈', '🍿', '🥗', '🥣', '🍲', '🍳', '🥚', '🧆', '🥙', '🌯', '🌮', '🥪', '🌭', '🍕', '🍟', '🍔', '🥓', '🥩', '🍗', '🍖', '🧀', '🧇', '🥞', '🥯', '🥨', '🥖', '🍞', '🥐', '🍠', '🥕', '🌽', '🌶️', '🥒', '🥬', '🥦', '🥑', '🍆', '🍅', '🥝', '🥥', '🍍', '🥭', '🍑', '🍒', '🍈', '🍓', '🍇', '🍉', '🍌', '🍋', '🍊', '🍐', '🍎', '🐕', '🐈', '🐁', '🐀', '🐹', '🐰', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐽', '🐸', '🐵', '🐒', '🐶', '🐺', '🦊', '🦝', '🐈', '🐅', '🐆', '🐎', '🦓', '🦌', '🦬', '🐃', '🐂', '🐄', '🐷', '🐗', '🐏', '🐑', '🐐', '🐪', '🐫', '🦙', '🦒', '🐘', '🦏', '🦛', '🐭', '🐁', '🐀', '🐹', '🐰', '🐿️', '🦔', '🦇', '🐻', '🐨', '🐼', '🦥', '🦦', '🦨', '🦘', '🦡', '🐾', '🦃', '🐔', '🐓', '🐣', '🐤', '🐥', '🐦', '🐧', '🕊️', '🦅', '🦆', '🦢', '🦉', '🦩', '🦚', '🦜', '🐸', '🐊', '🐢', '🦎', '🐍', '🐲', '🐉', '🦕', '🦖', '🐳', '🐋', '🐬', '🐟', '🐠', '🐡', '🦈', '🐙', '🐚', '🐌', '🦋', '🐛', '🐜', '🐝', '🐞', '🦗', '🕷️', '🕸️', '🦂', '🦟', '🦠', '💐', '🌸', '💮', '🌹', '🥀', '🌺', '🌻', '🌼', '🌷', '🌱', '🌲', '🌳', '🌴', '🌵', '🌾', '☘️', '🍀', '🍁', '🍂', '🍃', '🍄', '🌰', '🌍', '🌎', '🌏', '🌐', '🗺️', '🧭', '🏔️', '⛰️', '🌋', '🗻', '🏕️', '🏖️', '🏜️', '🏝️', '🏞️', '🏘️', '🏡', '🏠', '🏢', '🏣', '🏤', '🏥', '🏦', '🏨', '🏩', '🏫', '🏪', '🏭', '⛪', '🕌', '🕍', '⛩️', '🕋', '⛲', '🏛️', ' برج', '🗼', '🗽', '🌉', '🛣️', ' rail', '🚂', '🚃', '🚄', '🚅', '🚆', '🚇', '🚈', '🚉', '🚊', '🚝', '🚞', '🚋', '🚌', '🚍', '🚎', '🚐', '🚑', '🚒', '🚓', '🚔', '🚕', '🚖', '🚗', '🚙', '🚚', '🚛', '🚜', '🛵', '🚲', '🛴', '🛹', '🛺', '🚦', '🚧', '🛑', '🚨', '✈️', '🛫', '🛬', '💺', '🚁', '🚟', '🚠', '🚡', '🚢', '🛥️', '🚤', '⛵', '🛶', '⛴️', '🛳️', '⚓', '🌠', '🎇', '🎆', '🎑', '🌅', '🌄', '🌆', '🌃', '🌉', '🌁', '⌚', '📱', '💻', '🖥️', '⌨️', '🖱️', '🖨️', '💾', '💿', '📀', '💽', '📼', '📷', '📸', '📹', '🎥', '📞', '☎️', '📟', '📠', '📺', '📻', '🎙️', '🎚️', '🎛️', '🎤', '🎧', '🎼', '🎵', '🎶', '🎷', '🎺', '🎸', '🎹', '🎻', '🥁', '🎯', '🎳', '🎱', '🎲', '♟️', '🎮', '🎰', '🧩', '🏆', '🏅', '🥇', '🥈', '🥉', '⚽', '⚾', '🥎', '🏀', '🏐', '🏈', '🏉', '🎾', '🥏', '🪃', '🏏', '🏑', '🏒', '🥍', '🏓', '🏸', '🥊', '🥋', '🥅', '⛳', '⛸️', '🎣', '🤿', '🎽', '🎿', '🛷', '🥌', '🪢', '🪁', '🛼', '🤿', '🤼‍♀️', '🤼‍♂️', '🤸‍♀️', '🤸‍♂️', '⛹️‍♀️', '⛹️‍♂️', '🤾‍♀️', '🤾‍♂️', '🤺', '🏋️‍♀️', '🏋️‍♂️', '🧘‍♀️', '🧘‍♂️', '🛀', '🛌', '🛋️', '🪑', '🚽', '🚿', '🛁', '🧼', '🪥', '🪒', '🧺', '🧻', '🚽', '🧹', '🪣', '🧴', '🧽', '🧼', '🧺', '🪣', '🧴', '🧽', '🗝️', '🔑', '🚪', '🪞', '🪟', '🛏️', '🪟', '🪑', '🚽', '🚿', '🛁', '🧼', '🪥', '🪒', '🧺', '🧻', '🚽', '🧹', '🪣', '🧴', '🧽'
-  ];
-
+  // --- Emoji Data (Removed) ---
+  // const emojis = [...]; // This array is no longer needed
 
   // Function to load user from local storage
   function loadUserFromLocalStorage() {
@@ -514,46 +465,11 @@
     });
 
 
-    // --- Emoji Picker Logic ---
-    function populateEmojiPicker() {
-      emojiPickerContainer.innerHTML = ''; // Clear previous emojis
-      emojis.forEach(emoji => {
-        const span = document.createElement('span');
-        span.classList.add('emoji-item');
-        span.textContent = emoji;
-        span.onclick = () => {
-          const start = msgInput.selectionStart;
-          const end = msgInput.selectionEnd;
-          const text = msgInput.value;
-          msgInput.value = text.substring(0, start) + emoji + text.substring(end);
-          msgInput.selectionStart = msgInput.selectionEnd = start + emoji.length;
-          msgInput.focus();
-          msgInput.dispatchEvent(new Event('input')); // Trigger input event for auto-resize
-          emojiPickerContainer.classList.remove('show'); // Hide picker after selection
-        };
-        emojiPickerContainer.appendChild(span);
-      });
-    }
-
-    toggleEmojiPickerBtn.onclick = (event) => {
-      event.stopPropagation(); // Prevent click from bubbling to document and closing picker
-      emojiPickerContainer.classList.toggle('show');
-      if (emojiPickerContainer.classList.contains('show')) {
-        populateEmojiPicker(); // Populate only when shown
-      }
-    };
-
-    // Close emoji picker if clicked outside or on a message
-    document.addEventListener('click', (event) => {
-      if (!emojiPickerContainer.contains(event.target) && event.target !== toggleEmojiPickerBtn && !event.target.closest('.msg')) {
-        emojiPickerContainer.classList.remove('show');
-      }
-    });
-
-    // Prevent emoji picker from closing when clicking inside it
-    emojiPickerContainer.addEventListener('click', (event) => {
-      event.stopPropagation();
-    });
+    // --- Emoji Picker Logic (Removed) ---
+    // function populateEmojiPicker() { ... }
+    // toggleEmojiPickerBtn.onclick = (event) => { ... };
+    // document.addEventListener('click', (event) => { ... });
+    // emojiPickerContainer.addEventListener('click', (event) => { ... });
   }
 </script>
 
