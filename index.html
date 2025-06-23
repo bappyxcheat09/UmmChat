@@ -124,19 +124,25 @@
     max-width: 450px; /* Reduced from 550px */
     max-height: 750px; /* Height remains same */
     background-color: #1a1a1a; /* Darker background for the chat window itself */
-    border-radius: 0; /* No border-radius for full screen */
-    box-shadow: none; /* No shadow for full screen */
+    
+    /* --- THESE STYLES ARE NOW APPLIED GLOBALLY FOR ALL SCREEN SIZES --- */
+    border-radius: 12px;
+    border: 1px solid #ff69b4; /* Light pink border */
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4); /* Pink glow shadow */
+    /* --- END GLOBAL STYLES --- */
+
     overflow: hidden; /* Ensure content stays within */
     position: relative; /* For emoji picker positioning */
   }
 
-  @media (min-width: 600px) { /* Apply border-radius and shadow for larger screens */
+  /* The media query below is no longer strictly necessary for the border/shadow,
+     but you can use it if you want different styles *only* for larger screens.
+     For this solution, we assume you want the border/shadow always. */
+  /* @media (min-width: 600px) {
     #chat {
-      border-radius: 12px;
-      border: 1px solid #ff69b4; /* Light pink border */
-      box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4); /* Pink glow shadow */
+      // Any specific styles for screens >= 600px can go here, if different from above.
     }
-  }
+  } */
 
   .chat-header {
     display: flex;
@@ -300,7 +306,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
   import { getDatabase, ref, push, onValue, set } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
 
-  // Fixed usernames and passwords
+  // Fixed usernames and passwords (backslash removed)
   const validUsers = {
     "Bappy": "1234",
     "Testing": "1234",
@@ -398,7 +404,9 @@
   }
 
   function showNotification(sender, messageText) {
-    if (Notification.permission === "granted" && document.hidden) { // Only show notification if tab is not active
+    // Check if the current user is active in the chat window. If the document is hidden, show the notification.
+    // Also, don't show notification for messages sent by the current user.
+    if (Notification.permission === "granted" && document.hidden && sender !== currentUser) {
       const title = "BAPPY MESSAGE DICHE FAST CHECK KORO"; // Your custom title
       const options = {
         body: `${sender}: ${messageText}`, // Message body
@@ -415,6 +423,9 @@
 
     onValue(chatRef, (snapshot) => {
       let lastMessage = null;
+      // Store current scroll position to maintain it after update, if user is not at the bottom
+      const isScrolledToBottom = messagesDiv.scrollHeight - messagesDiv.clientHeight <= messagesDiv.scrollTop + 1;
+
       messagesDiv.innerHTML = '';
       snapshot.forEach(child => {
         const msg = child.val();
@@ -425,7 +436,12 @@
         div.textContent = `${msg.user}: ${msg.text}`;
         messagesDiv.appendChild(div);
       });
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+      // Scroll to bottom only if user was already at the bottom or if a new message arrived from someone else
+      if (isScrolledToBottom || (lastMessage && lastMessage.user !== currentUser)) {
+         messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+     
 
       // Show notification if a new message arrives and it's not from the current user
       if (lastMessage && lastMessage.user !== currentUser) {
