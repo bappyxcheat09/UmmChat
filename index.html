@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Mini Chat Login</title>
+<title>Welcome To Ovis Chatiing Site</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
@@ -22,15 +22,87 @@
     overflow: hidden; /* Prevent body scroll */
   }
 
+  /* --- Login Section Styling --- */
   #login {
-    background: #1f1f1f;
+    background: linear-gradient(135deg, #2a2a2a, #1a1a1a); /* Subtle dark gradient */
     width: 90vw;
-    max-width: 400px;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Slightly softer shadow */
-    animation: fadeIn 0.5s ease-out forwards;
+    max-width: 380px; /* Slightly smaller for professionalism */
+    border-radius: 15px; /* More rounded */
+    padding: 30px; /* More padding */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6); /* Deeper, softer shadow */
+    animation: fadeIn 0.7s ease-out forwards; /* Slightly slower fade-in */
+    display: flex; /* Flexbox for better alignment */
+    flex-direction: column;
+    align-items: center; /* Center content */
   }
+
+  #login h2 {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: #f0f0f0; /* Lighter color for contrast */
+    margin-bottom: 25px; /* More space below title */
+    text-align: center;
+    letter-spacing: 0.5px; /* Slight letter spacing for style */
+  }
+
+  #login input {
+    width: 100%;
+    padding: 12px 0; /* Adjust padding */
+    margin: 10px 0;
+    background: transparent; /* Transparent background */
+    border: none;
+    border-bottom: 2px solid #555; /* Clean bottom border */
+    border-radius: 0; /* No border-radius */
+    color: #eee;
+    font-size: 17px;
+    transition: border-bottom-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  #login input::placeholder {
+    color: #aaa; /* Lighter placeholder color */
+  }
+
+  #login input:focus {
+    outline: none;
+    border-bottom-color: #ff69b4; /* Pink border on focus */
+    box-shadow: 0 1px 0 0 #ff69b4; /* Subtle shadow for depth on focus */
+  }
+
+  #login button {
+    width: 100%;
+    background: linear-gradient(45deg, #ff69b4, #e652a2); /* Gradient button */
+    border: none;
+    padding: 16px; /* Larger padding */
+    border-radius: 30px; /* Pill-shaped button */
+    font-weight: 700; /* Bolder text */
+    color: #fff;
+    font-size: 18px; /* Larger font size */
+    cursor: pointer;
+    margin-top: 30px; /* More space above button */
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4); /* Pink glow shadow */
+    letter-spacing: 0.5px;
+  }
+
+  #login button:hover {
+    background: linear-gradient(45deg, #e652a2, #ff69b4); /* Reverse gradient on hover */
+    transform: translateY(-2px) scale(1.02); /* Lift and slightly enlarge */
+    box-shadow: 0 8px 20px rgba(255, 105, 180, 0.6);
+  }
+  #login button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(255, 105, 180, 0.3);
+  }
+
+  #loginError {
+    color: #ff5255;
+    text-align: center;
+    margin-top: 20px; /* More margin */
+    font-size: 16px;
+    font-weight: 500;
+  }
+  /* --- End Login Section Styling --- */
+
 
   @keyframes fadeIn {
     from {
@@ -48,8 +120,8 @@
     flex-direction: column;
     width: 100vw; /* Occupy full width on mobile */
     height: 100vh; /* Occupy full height on mobile */
-    max-width: 600px; /* Max width for desktop screens */
-    max-height: 800px; /* Max height for desktop screens */
+    max-width: 550px; /* Slightly smaller max width for desktop screens */
+    max-height: 750px; /* Slightly smaller max height for desktop screens */
     background-color: #1a1a1a; /* Darker background for the chat window itself */
     border-radius: 0; /* No border-radius for full screen */
     box-shadow: none; /* No shadow for full screen */
@@ -91,53 +163,6 @@
     to {
       text-shadow: 0 0 8px #ff69b4, 0 0 15px #ff69b4, 0 0 30px #ff69b4, 0 0 60px #ff69b4;
     }
-  }
-
-  input {
-    width: 100%;
-    padding: 14px 15px;
-    margin: 10px 0;
-    background: #2b2b2b;
-    border: none;
-    border-radius: 8px;
-    color: #eee;
-    font-size: 16px;
-    transition: box-shadow 0.2s ease;
-  }
-
-  input:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px #ff69b4; /* Pink glow on focus */
-  }
-
-  button {
-    width: 100%;
-    background: #ff69b4; /* Pink button */
-    border: none;
-    padding: 15px;
-    border-radius: 8px;
-    font-weight: 600;
-    color: #fff;
-    font-size: 17px;
-    cursor: pointer;
-    margin-top: 15px;
-    transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  }
-
-  button:hover {
-    background: #e652a2; /* Slightly darker pink on hover */
-    transform: translateY(-1px);
-  }
-  button:active {
-    transform: translateY(0);
-  }
-
-  #loginError {
-    color: #ff5255;
-    text-align: center;
-    margin-top: 10px;
-    font-size: 15px;
   }
 
   #messages {
@@ -294,7 +319,7 @@
 <body>
 
 <div id="login">
-  <h2>Login to Chat</h2>
+  <h2>Welcome To New Chats Site</h2>
   <input type="text" id="username" placeholder="Username" autocomplete="off" />
   <input type="password" id="password" placeholder="Password" autocomplete="off" />
   <button id="loginBtn">Login</button>
@@ -303,7 +328,7 @@
 
 <div id="chat">
   <div class="chat-header">
-    <h2 class="glowing-title">BAPPY AND NABILAS CHATS</h2>
+    <h2 class="glowing-title">BAPPY'S CHATTING SITE</h2>
   </div>
   <div id="messages"></div>
   <div id="inputArea">
@@ -359,135 +384,135 @@
   // --- Emoji Data (Expanded) ---
   const emojis = [
     '😀', '😁', '😂', '🤣', '😃', '😄', '😅', '😆', '😉', '😊', '😋', '😎', '😍', '😘', '😗', '😙', '😚', '🤗', '🤔', '🤨', '😐', '😑', '😶', '😏', '😒', '🙄', '😬', '🤥', '😌', '😔', '😪', '🤤', '😴', '😷', '🤒', '🤕', '🤢', '🤮', '🤧', '🥵', '🥶', '😵', '🤯', '🤠', '🥳', '😎', '🤓', '🧐', '😕', '😟', '🙁', '😮', '😯', '😲', '😳', '🥺', '😦', '😧', '😨', '😩', '😫', '😤', '😠', '😡', '🤬', '😈', '👿', '💀', '☠️', '💩', '🤡', '👹', '👺', '👻', '👽', '👾', '🤖', '😺', '😸', '😹', '😻', '😼', '😽', '🙀', '😿', '😾', '👋', '🤚', '🖐️', '✋', '🖖', '👌', '🤏', '✌️', '🤞', '🤟', '🤘', '🤙', '👈', '👉', '👆', '🖕', '👇', '☝️', '👍', '👎', '✊', '👊', '🤛', '🤜', '👏', '🙌', '👐', '🤲', '🤝', '🙏', '✍️', '💅', '🤳', '💪', '🦵', '🦶', '👂', '👃', '🧠', '🦷', '🦴', '👀', '👁️', '👅', '👄', '💋', '❤️', '🧡', '💛', '💚', '💙', '💜', '🤎', '🖤', '🤍', '💔', '❣️', '💕', '💞', '💗', '💖', '💘', '💓', '🧡', '💛', '💚', '💙', '💜', '🤎', '🖤', '🤍', '💌', '💥', '💫', '💥', '✨', '🌟', '💫', '🔥', '💯', '🌈', '☀️', '☔', '☁️', '❄️', '☃️', '⚡', '💧', '🌊', '💨', '🌀', '🌎', '🌍', '🌏', '🌕', '🌖', '🌗', '🌘', '🌑', '🌒', '🌓', '🌔', '🌙', '⭐', '🌟', '💫', '✨', '☄️', '🚀', '🛸', '🛰️', '💡', '🔦', '🔋', '🔌', '💻', '🖥️', '⌨️', '🖱️', '🖨️', '📱', '📞', '☎️', '📟', '📠', '📺', '📻', '🎙️', '🎚️', '🎛️', '🎤', '🎧', '🎼', '🎵', '🎶', '🎷', '🎺', '🎸', '🎹', '🎻', '🥁', '🎬', '🎥', '📸', '📹', '💡', '📓', '📔', '📒', '📚', '📖', '🔖', '🏷️', '💰', '💳', '💎', '📈', '📉', '📊', '🔔', '🔕', '📢', '📣', '💬', '💭', '🫂', '🚶‍♀️', '🚶‍♂️', '🏃‍♀️', '🏃‍♂️', '💃', '🕺', '👨‍👩‍👧‍👦', '👨‍👩‍👧', '👩‍👩‍👧', '👨‍👨‍👧', '👨‍👩‍👦‍👦', '👨‍👨‍👦‍👦', '👩‍👩‍👦‍👦', '👨‍👩‍👧‍👦', '👨‍👩‍👧‍👧', '👩‍👩‍👧‍👧', '👨‍👨‍👧‍👧', '👨‍👩‍👦', '👩‍👩‍👦', '👨‍👨‍👦', '👥', '🧑‍🤝‍🧑', '🫂', '🏡', '🏠', '🏘️', '🏢', '🏗️', '🏭', '⛪', '🕌', '🛕', '🕍', '⛩️', '🏬', '🏪', '🏫', '🎡', '🎢', '🎠', '⛲', '🗼', '🗽', '🏛️', '⛰️', '🗻', '🏕️', '🏖️', '🏜️', '🏝️', '🏞️', '🛣️', '🛤️', '🚂', '🚃', '🚄', '🚅', '🚆', '🚇', '🚈', '🚉', '🚊', '🚗', '🚘', '🚌', '🚍', '🚎', '🚐', '🚑', '🚒', '🚓', '🚔', '🚕', '🚖', '🚗', '🚙', '🚚', '🚛', '🚜', '🛵', '🚲', '🛴', '🛹', '🛺', '✈️', '🛫', '🛬', '💺', '🚁', '🚟', '🚠', '🚡', '🚢', '🛥️', '🚤', '⛵', '🛶', '⛴️', '🛳️', '⚓', '🌠', '🎇', '🎆', '🎑', '🌅', '🌄', '🌆', '🌃', '🌉', '🌁', '⌚', '📱', '💻', '🖥️', '⌨️', '🖱️', '🖨️', '💾', '💿', '📀', '💽', '📼', '📷', '📸', '📹', '🎥', '📞', '☎️', '📟', '📠', '📺', '📻', '🎙️', '🎚️', '🎛️', '🎤', '🎧', '🎼', '🎵', '🎶', '🎷', '🎺', '🎸', '🎹', '🎻', '🥁', '🎯', '🎳', '🎱', '🎲', '♟️', '🎮', '🎰', '🧩', '🏆', '🏅', '🥇', '🥈', '🥉', '⚽', '⚾', '🥎', '🏀', '🏐', '🏈', '🏉', '🎾', '🥏', '🪃', '🏏', '🏑', '🏒', '🥍', '🏓', '🏸', '🥊', '🥋', '🥅', '⛳', '⛸️', '🎣', '🤿', '🎽', '🎿', '🛷', '🥌', '🪢', '🪁', '🛼', '🤿', '🤼‍♀️', '🤼‍♂️', '🤸‍♀️', '🤸‍♂️', '⛹️‍♀️', '⛹️‍♂️', '🤾‍♀️', '🤾‍♂️', '🤺', '🏋️‍♀️', '🏋️‍♂️', '🧘‍♀️', '🧘‍♂️', '🛀', '🛌', '🛋️', '🪑', '🚽', '🚿', '🛁', '🧼', '🪥', '🪒', '🧺', '🧻', '🚽', '🧹', '🪣', '🧴', '🧽', '🧼', '🧺', '🪣', '🧴', '🧽', '🗝️', '🔑', '🚪', '🪞', '🪟', '🛏️', '🪟', '🪑', '🚽', '🚿', '🛁', '🧼', '🪥', '🪒', '🧺', '🧻', '🚽', '🧹', '🪣', '🧴', '🧽', '🍎', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🍈', '🍒', '🍑', '🥭', '🍍', '🥥', '🥝', '🍅', '🍆', '🥑', '🥦', '🥬', '🥒', '🌶️', '🌽', '🥕', '🥔', '🍠', '🥐', '🍞', '🥖', '🥨', '🥯', '🥞', '🧇', '🧀', '🍖', '🍗', '🥩', '🥓', '🍔', '🍟', '🍕', '🌭', '🥪', '🌮', '🌯', '🥙', '🧆', '🥚', '🍳', '🍲', '🥣', '🥗', '🍿', '🧈', '🧂', '🥫', '🍱', '🍘', '🍙', '🍚', '🍛', '🍜', '🍝', '🍠', '🍢', '🍣', '🍤', '🍥', '🥮', '🍡', '🥟', '🥠', '🥡', '🍦', '🍧', '🍨', '🍩', '🍪', '🎂', '🍰', '🧁', '🥧', '🍫', '🍬', '🍭', '🍮', '🍯', '🍼', '🥛', '☕', '🍵', '🍶', '🍾', '🍷', '🍸', '🍹', '🍺', '🍻', '🥂', '🥃', '🥤', '🧉', '🧊', '🥄', '🍴', '🍽️', '🥣', '🥡', '🥢', '🍚', '🥫', '🍿', '🧊', '🧉', '🥤', '🥃', '🥂', '🍻', '🍺', '🍹', '🍸', '🍷', '🍾', '🍶', '🍵', '☕', '🥛', '🍼', '🍯', '🍮', '🍭', '🍬', '🍫', '🥧', '🧁', '🍰', '🎂', '🍪', '🍩', '🍨', '🍧', '🍦', '🥡', '🥠', '🥟', '🍡', '🥮', '🍥', '🍤', '🍣', '🍢', '🍠', '🍝', '🍜', '🍛', '🍚', '🍙', '🍘', '🍱', '🥫', '🧂', '🧈', '🍿', '🥗', '🥣', '🍲', '🍳', '🥚', '🧆', '🥙', '🌯', '🌮', '🥪', '🌭', '🍕', '🍟', '🍔', '🥓', '🥩', '🍗', '🍖', '🧀', '🧇', '🥞', '🥯', '🥨', '🥖', '🍞', '🥐', '🍠', '🥕', '🌽', '🌶️', '🥒', '🥬', '🥦', '🥑', '🍆', '🍅', '🥝', '🥥', '🍍', '🥭', '🍑', '🍒', '🍈', '🍓', '🍇', '🍉', '🍌', '🍋', '🍊', '🍐', '🍎', '🐕', '🐈', '🐁', '🐀', '🐹', '🐰', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐽', '🐸', '🐵', '🐒', '🐶', '🐺', '🦊', '🦝', '🐈', '🐅', '🐆', '🐎', '🦓', '🦌', '🦬', '🐃', '🐂', '🐄', '🐷', '🐗', '🐏', '🐑', '🐐', '🐪', '🐫', '🦙', '🦒', '🐘', '🦏', '🦛', '🐭', '🐁', '🐀', '🐹', '🐰', '🐿️', '🦔', '🦇', '🐻', '🐨', '🐼', '🦥', '🦦', '🦨', '🦘', '🦡', '🐾', '🦃', '🐔', '🐓', '🐣', '🐤', '🐥', '🐦', '🐧', '🕊️', '🦅', '🦆', '🦢', '🦉', '🦩', '🦚', '🦜', '🐸', '🐊', '🐢', '🦎', '🐍', '🐲', '🐉', '🦕', '🦖', '🐳', '🐋', '🐬', '🐟', '🐠', '🐡', '🦈', '🐙', '🐚', '🐌', '🦋', '🐛', '🐜', '🐝', '🐞', '🦗', '🕷️', '🕸️', '🦂', '🦟', '🦠', '💐', '🌸', '💮', '🌹', '🥀', '🌺', '🌻', '🌼', '🌷', '🌱', '🌲', '🌳', '🌴', '🌵', '🌾', '☘️', '🍀', '🍁', '🍂', '🍃', '🍄', '🌰', '🌍', '🌎', '🌏', '🌐', '🗺️', '🧭', '🏔️', '⛰️', '🌋', '🗻', '🏕️', '🏖️', '🏜️', '🏝️', '🏞️', '🏘️', '🏡', '🏠', '🏢', '🏣', '🏤', '🏥', '🏦', '🏨', '🏩', '🏫', '🏪', '🏭', '⛪', '🕌', '🕍', '⛩️', '🕋', '⛲', '🏛️', ' برج', '🗼', '🗽', '🌉', '🛣️', ' rail', '🚂', '🚃', '🚄', '🚅', '🚆', '🚇', '🚈', '🚉', '🚊', '🚝', '🚞', '🚋', '🚌', '🚍', '🚎', '🚐', '🚑', '🚒', '🚓', '🚔', '🚕', '🚖', '🚗', '🚙', '🚚', '🚛', '🚜', '🛵', '🚲', '🛴', '🛹', '🛺', '🚦', '🚧', '🛑', '🚨', '✈️', '🛫', '🛬', '💺', '🚁', '🚟', '🚠', '🚡', '🚢', '🛥️', '🚤', '⛵', '🛶', '⛴️', '🛳️', '⚓', '🌠', '🎇', '🎆', '🎑', '🌅', '🌄', '🌆', '🌃', '🌉', '🌁', '⌚', '📱', '💻', '🖥️', '⌨️', '🖱️', '🖨️', '💾', '💿', '📀', '💽', '📼', '📷', '📸', '📹', '🎥', '📞', '☎️', '📟', '📠', '📺', '📻', '🎙️', '🎚️', '🎛️', '🎤', '🎧', '🎼', '🎵', '🎶', '🎷', '🎺', '🎸', '🎹', '🎻', '🥁', '🎯', '🎳', '🎱', '🎲', '♟️', '🎮', '🎰', '🧩', '🏆', '🏅', '🥇', '🥈', '🥉', '⚽', '⚾', '🥎', '🏀', '🏐', '🏈', '🏉', '🎾', '🥏', '🪃', '🏏', '🏑', '🏒', '🥍', '🏓', '🏸', '🥊', '🥋', '🥅', '⛳', '⛸️', '🎣', '🤿', '🎽', '🎿', '🛷', '🥌', '🪢', '🪁', '🛼', '🤿', '🤼‍♀️', '🤼‍♂️', '🤸‍♀️', '🤸‍♂️', '⛹️‍♀️', '⛹️‍♂️', '🤾‍♀️', '🤾‍♂️', '🤺', '🏋️‍♀️', '🏋️‍♂️', '🧘‍♀️', '🧘‍♂️', '🛀', '🛌', '🛋️', '🪑', '🚽', '🚿', '🛁', '🧼', '🪥', '🪒', '🧺', '🧻', '🚽', '🧹', '🪣', '🧴', '🧽', '🧼', '🧺', '🪣', '🧴', '🧽', '🗝️', '🔑', '🚪', '🪞', '🪟', '🛏️', '🪟', '🪑', '🚽', '🚿', '🛁', '🧼', '🪥', '🪒', '🧺', '🧻', '🚽', '🧹', '🪣', '🧴', '🧽'
-  ];
+  ];
 
 
-  // Function to load user from local storage
-  function loadUserFromLocalStorage() {
-    const storedUsername = localStorage.getItem(LOCAL_STORAGE_USERNAME_KEY);
-    if (storedUsername && validUsers[storedUsername]) {
-      currentUser = storedUsername;
-      loginDiv.style.display = 'none';
-      chatDiv.style.display = 'flex';
-      startChat();
-      return true;
-    }
-    return false;
-  }
+  // Function to load user from local storage
+  function loadUserFromLocalStorage() {
+    const storedUsername = localStorage.getItem(LOCAL_STORAGE_USERNAME_KEY);
+    if (storedUsername && validUsers[storedUsername]) {
+      currentUser = storedUsername;
+      loginDiv.style.display = 'none';
+      chatDiv.style.display = 'flex';
+      startChat();
+      return true;
+    }
+    return false;
+  }
 
-  // Attempt to load user on page load
-  if (!loadUserFromLocalStorage()) {
-    loginDiv.style.display = 'flex';
-  }
+  // Attempt to load user on page load
+  if (!loadUserFromLocalStorage()) {
+    loginDiv.style.display = 'flex';
+  }
 
-  loginBtn.onclick = () => {
-    const username = usernameInput.value.trim();
-    const password = passwordInput.value.trim();
+  loginBtn.onclick = () => {
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
 
-    if (validUsers[username] && validUsers[username] === password) {
-      currentUser = username;
-      localStorage.setItem(LOCAL_STORAGE_USERNAME_KEY, currentUser);
-      loginDiv.style.display = 'none';
-      chatDiv.style.display = 'flex';
-      loginError.textContent = '';
-      startChat();
-    } else {
-      loginError.textContent = 'Invalid username or password!';
-      usernameInput.value = '';
-      passwordInput.value = '';
-      usernameInput.focus();
-    }
-  };
+    if (validUsers[username] && validUsers[username] === password) {
+      currentUser = username;
+      localStorage.setItem(LOCAL_STORAGE_USERNAME_KEY, currentUser);
+      loginDiv.style.display = 'none';
+      chatDiv.style.display = 'flex';
+      loginError.textContent = '';
+      startChat();
+    } else {
+      loginError.textContent = 'Invalid username or password!';
+      usernameInput.value = '';
+      passwordInput.value = '';
+      usernameInput.focus();
+    }
+  };
 
-  function startChat() {
-    const chatRef = ref(db, "chats/" + chatRoom);
+  function startChat() {
+    const chatRef = ref(db, "chats/" + chatRoom);
 
-    onValue(chatRef, (snapshot) => {
-      messagesDiv.innerHTML = '';
-      snapshot.forEach(child => {
-        const msg = child.val();
-        const div = document.createElement('div');
-        div.classList.add('msg');
-        div.classList.add(msg.user === currentUser ? 'me' : 'other');
-        div.textContent = `${msg.user}: ${msg.text}`;
-        messagesDiv.appendChild(div);
-      });
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    });
+    onValue(chatRef, (snapshot) => {
+      messagesDiv.innerHTML = '';
+      snapshot.forEach(child => {
+        const msg = child.val();
+        const div = document.createElement('div');
+        div.classList.add('msg');
+        div.classList.add(msg.user === currentUser ? 'me' : 'other');
+        div.textContent = `${msg.user}: ${msg.text}`;
+        messagesDiv.appendChild(div);
+      });
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
 
-    // --- Message Sending Logic ---
-    function sendMessage() {
-      const text = msgInput.value.trim();
-      if (!text) return;
+    // --- Message Sending Logic ---
+    function sendMessage() {
+      const text = msgInput.value.trim();
+      if (!text) return;
 
-      const chatRefPush = ref(db, "chats/" + chatRoom);
-      push(chatRefPush, {
-        user: currentUser,
-        text: text,
-        timestamp: Date.now()
-      });
-      msgInput.value = ''; // Clear input field after sending
-      msgInput.style.height = 'auto'; // Reset textarea height
-      msgInput.focus();
-    }
+      const chatRefPush = ref(db, "chats/" + chatRoom);
+      push(chatRefPush, {
+        user: currentUser,
+        text: text,
+        timestamp: Date.now()
+      });
+      msgInput.value = ''; // Clear input field after sending
+      msgInput.style.height = 'auto'; // Reset textarea height
+      msgInput.focus();
+    }
 
-    sendBtn.onclick = sendMessage;
+    sendBtn.onclick = sendMessage;
 
-    msgInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) { // Send on Enter, new line on Shift+Enter
-        e.preventDefault(); // Prevent default Enter key behavior (new line)
-        sendMessage();
-      }
-    });
+    msgInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) { // Send on Enter, new line on Shift+Enter
+        e.preventDefault(); // Prevent default Enter key behavior (new line)
+        sendMessage();
+      }
+    });
 
-    // --- Auto-resize textarea for multi-line input ---
-    msgInput.addEventListener('input', () => {
-      msgInput.style.height = 'auto';
-      msgInput.style.height = msgInput.scrollHeight + 'px';
-    });
+    // --- Auto-resize textarea for multi-line input ---
+    msgInput.addEventListener('input', () => {
+      msgInput.style.height = 'auto';
+      msgInput.style.height = msgInput.scrollHeight + 'px';
+    });
 
 
-    // --- Emoji Picker Logic ---
-    function populateEmojiPicker() {
-      emojiPickerContainer.innerHTML = ''; // Clear previous emojis
-      emojis.forEach(emoji => {
-        const span = document.createElement('span');
-        span.classList.add('emoji-item');
-        span.textContent = emoji;
-        span.onclick = () => {
-          const start = msgInput.selectionStart;
-          const end = msgInput.selectionEnd;
-          const text = msgInput.value;
-          msgInput.value = text.substring(0, start) + emoji + text.substring(end);
-          msgInput.selectionStart = msgInput.selectionEnd = start + emoji.length;
-          msgInput.focus();
-          msgInput.dispatchEvent(new Event('input')); // Trigger input event for auto-resize
-          emojiPickerContainer.classList.remove('show'); // Hide picker after selection
-        };
-        emojiPickerContainer.appendChild(span);
-      });
-    }
+    // --- Emoji Picker Logic ---
+    function populateEmojiPicker() {
+      emojiPickerContainer.innerHTML = ''; // Clear previous emojis
+      emojis.forEach(emoji => {
+        const span = document.createElement('span');
+        span.classList.add('emoji-item');
+        span.textContent = emoji;
+        span.onclick = () => {
+          const start = msgInput.selectionStart;
+          const end = msgInput.selectionEnd;
+          const text = msgInput.value;
+          msgInput.value = text.substring(0, start) + emoji + text.substring(end);
+          msgInput.selectionStart = msgInput.selectionEnd = start + emoji.length;
+          msgInput.focus();
+          msgInput.dispatchEvent(new Event('input')); // Trigger input event for auto-resize
+          emojiPickerContainer.classList.remove('show'); // Hide picker after selection
+        };
+        emojiPickerContainer.appendChild(span);
+      });
+    }
 
-    toggleEmojiPickerBtn.onclick = (event) => {
-      event.stopPropagation(); // Prevent click from bubbling to document and closing picker
-      emojiPickerContainer.classList.toggle('show');
-      if (emojiPickerContainer.classList.contains('show')) {
-        populateEmojiPicker(); // Populate only when shown
-      }
-    };
+    toggleEmojiPickerBtn.onclick = (event) => {
+      event.stopPropagation(); // Prevent click from bubbling to document and closing picker
+      emojiPickerContainer.classList.toggle('show');
+      if (emojiPickerContainer.classList.contains('show')) {
+        populateEmojiPicker(); // Populate only when shown
+      }
+    };
 
-    // Close emoji picker if clicked outside or on a message
-    document.addEventListener('click', (event) => {
-      if (!emojiPickerContainer.contains(event.target) && event.target !== toggleEmojiPickerBtn && !event.target.closest('.msg')) {
-        emojiPickerContainer.classList.remove('show');
-      }
-    });
+    // Close emoji picker if clicked outside or on a message
+    document.addEventListener('click', (event) => {
+      if (!emojiPickerContainer.contains(event.target) && event.target !== toggleEmojiPickerBtn && !event.target.closest('.msg')) {
+        emojiPickerContainer.classList.remove('show');
+      }
+    });
 
-    // Prevent emoji picker from closing when clicking inside it
-    emojiPickerContainer.addEventListener('click', (event) => {
-      event.stopPropagation();
-    });
-  }
+    // Prevent emoji picker from closing when clicking inside it
+    emojiPickerContainer.addEventListener('click', (event) => {
+      event.stopPropagation();
+    });
+  }
 </script>
 
 </body>
