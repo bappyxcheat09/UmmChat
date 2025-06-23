@@ -3,276 +3,329 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Mini Chat Login with Local Profile Pic</title>
+<title>Mini Chat Login</title>
 <style>
-    /* --- তোমার আগের স্টাইল --- */
-    * { box-sizing: border-box; }
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: #121212;
-        color: #eee;
-        margin: 0; padding: 0;
-        display: flex; justify-content: center; align-items: center;
-        height: 100vh; overflow: hidden;
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #121212; /* Dark background for the overall app */
+    color: #eee;
+    margin: 0; padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden; /* Prevent body scroll */
+  }
+
+  #login {
+    background: #1f1f1f;
+    width: 90vw;
+    max-width: 400px;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Slightly softer shadow */
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
     }
-    #login, #chat {
-        background: #1f1f1f;
-        width: 90vw;
-        max-width: 400px;
-        border-radius: 15px;
-        padding: 30px;
-        box-shadow: 0 10px 30px rgba(0, 211, 102, 0.2);
-        border: 1px solid rgba(37, 211, 102, 0.3);
-        transition: all 0.3s ease-in-out;
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
-    #chat { display: none; flex-direction: column; height: 90vh; max-height: 700px; }
-    h2 {
-        margin-top: 0; text-align: center; font-weight: 700;
-        color: #25d366; text-shadow: 0 0 8px rgba(37, 211, 102, 0.7);
-        margin-bottom: 25px;
+  }
+
+  #chat {
+    display: none;
+    flex-direction: column;
+    width: 100vw; /* Occupy full width on mobile */
+    height: 100vh; /* Occupy full height on mobile */
+    max-width: 600px; /* Max width for desktop screens */
+    max-height: 800px; /* Max height for desktop screens */
+    background-color: #1a1a1a; /* Darker background for the chat window itself */
+    border-radius: 0; /* No border-radius for full screen */
+    box-shadow: none; /* No shadow for full screen */
+    overflow: hidden; /* Ensure content stays within */
+    position: relative; /* For emoji picker positioning */
+  }
+
+  @media (min-width: 600px) { /* Apply border-radius and shadow for larger screens */
+    #chat {
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     }
-    input[type="text"], input[type="password"] {
-        width: 100%;
-        padding: 14px 15px;
-        margin: 12px 0;
-        background: #2e2e2e;
-        border: none;
-        border-radius: 10px;
-        color: #eee;
-        font-size: 16px;
-        transition: all 0.3s ease;
-        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
+
+  .chat-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #202c33;
+    border-bottom: 1px solid #333;
+  }
+
+  .glowing-title {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #ff69b4; /* Pinkish glow for love theme */
+    text-shadow: 0 0 5px #ff69b4, 0 0 10px #ff69b4, 0 0 20px #ff69b4, 0 0 40px #ff69b4;
+    animation: glow 1.8s ease-in-out infinite alternate;
+    margin: 0;
+    flex-grow: 1;
+    text-align: center;
+  }
+
+  @keyframes glow {
+    from {
+      text-shadow: 0 0 5px #ff69b4, 0 0 10px #ff69b4, 0 0 20px #ff69b4, 0 0 40px #ff69b4;
     }
-    input[type="text"]:focus, input[type="password"]:focus {
-        background: #3a3a3a;
-        outline: none;
-        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5), 0 0 0 2px #25d366;
+    to {
+      text-shadow: 0 0 8px #ff69b4, 0 0 15px #ff69b4, 0 0 30px #ff69b4, 0 0 60px #ff69b4;
     }
-    button {
-        width: 100%;
-        background: #25d366;
-        border: none;
-        padding: 16px;
-        border-radius: 10px;
-        font-weight: bold;
-        color: #121212;
-        font-size: 18px;
-        cursor: pointer;
-        margin-top: 20px;
-        transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-        box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
-    }
-    button:hover {
-        background: #1da851;
-        transform: translateY(-2px);
-        box-shadow: 0 7px 20px rgba(37, 211, 102, 0.6);
-    }
-    button:active {
-        transform: translateY(0);
-        box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
-    }
-    #loginError {
-        color: #ff6b6b;
-        text-align: center;
-        margin-top: 15px;
-        font-size: 15px;
-        font-weight: 500;
-    }
-    #messages {
-        flex: 1;
-        overflow-y: auto;
-        padding: 15px;
-        background: #2e2e2e;
-        border-radius: 12px;
-        margin-bottom: 15px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
-    }
-    .message-container {
-        display: flex;
-        align-items: flex-end;
-        gap: 10px;
-    }
-    .msg {
-        padding: 12px 16px;
-        border-radius: 20px;
-        max-width: 75%;
-        word-wrap: break-word;
-        position: relative;
-        font-size: 15px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        color: #eee;
-        background: #3a3a3a;
-    }
-    .msg .timestamp {
-        font-size: 11px;
-        color: rgba(255, 255, 255, 0.6);
-        text-align: right;
-        margin-top: 8px;
-        display: block;
-        line-height: 1;
-    }
-    .msg .status-icon {
-        font-size: 13px;
-        margin-left: 6px;
-        color: #9e9e9e;
-    }
-    .msg.seen .status-icon {
-        color: #34b7f1;
-        text-shadow: 0 0 3px rgba(52, 183, 241, 0.7);
-    }
-    .me .msg {
-        background: linear-gradient(to right, #25d366, #1da851);
-        color: #121212;
-        margin-left: auto;
-        border-bottom-right-radius: 5px;
-    }
-    .message-container.me {
-        justify-content: flex-end;
-    }
-    .profile-pic-chat {
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid #25d366;
-        box-shadow: 0 0 8px rgba(37, 211, 102, 0.4);
-        flex-shrink: 0;
-    }
-    .message-container.me .profile-pic-chat {
-        order: 2;
-        margin-left: 10px;
-    }
-    .message-container.other .profile-pic-chat {
-        order: 1;
-        margin-right: 10px;
-    }
-    #inputArea {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        background: #1f1f1f;
-        padding: 10px;
-        border-radius: 12px;
-        box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2);
-    }
-    #msgInput {
-        flex: 1;
-        padding: 12px 18px;
-        border-radius: 25px;
-        border: none;
-        font-size: 16px;
-        background: #2e2e2e;
-        color: #eee;
-        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
-    }
-    #msgInput:focus {
-        outline: none;
-        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5), 0 0 0 2px #25d366;
-    }
-    #sendBtn {
-        width: 50px;
-        height: 50px;
-        padding: 0;
-        border-radius: 50%;
-        font-size: 24px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-shrink: 0;
-        background: #25d366;
-        color: #fff;
-        box-shadow: 0 3px 10px rgba(37, 211, 102, 0.4);
-        border: none;
-        cursor: pointer;
-        transition: background 0.3s ease, transform 0.2s ease;
-    }
-    #sendBtn:hover {
-        background: #1da851;
-        transform: scale(1.05);
-    }
-    #profilePicInput {
-        display: block;
-        margin: 25px auto 15px;
-        width: 100%;
-        border: 1px solid #25d366;
-        padding: 12px;
-        border-radius: 10px;
-        background: #222;
-        color: #eee;
-        cursor: pointer;
-        font-size: 15px;
-        text-align: center;
-    }
-    #profilePicPreview {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        background-color: #333;
-        margin: 0 auto 30px;
-        display: block;
-        object-fit: cover;
-        border: 3px solid #25d366;
-        box-shadow: 0 0 15px rgba(37, 211, 102, 0.5);
-    }
-    #typingIndicator {
-        font-size: 14px;
-        color: #9e9e9e;
-        margin-bottom: 10px;
-        height: 25px;
-        display: flex;
-        align-items: center;
-        padding-left: 10px;
-    }
-    .typing-animation span {
-        display: inline-block;
-        animation: typing-bounce 0.8s infinite ease-in-out;
-        opacity: 0.5;
-        font-weight: bold;
-        color: #25d366;
-    }
-    .typing-animation span:nth-child(1) { animation-delay: 0s; }
-    .typing-animation span:nth-child(2) { animation-delay: 0.15s; }
-    .typing-animation span:nth-child(3) { animation-delay: 0.3s; }
-    @keyframes typing-bounce {
-        0%, 100% { transform: translateY(0); opacity: 0.5; }
-        50% { transform: translateY(-4px); opacity: 1; }
-    }
+  }
+
+  input {
+    width: 100%;
+    padding: 14px 15px;
+    margin: 10px 0;
+    background: #2b2b2b;
+    border: none;
+    border-radius: 8px;
+    color: #eee;
+    font-size: 16px;
+    transition: box-shadow 0.2s ease;
+  }
+
+  input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #ff69b4; /* Pink glow on focus */
+  }
+
+  button {
+    width: 100%;
+    background: #ff69b4; /* Pink button */
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #fff;
+    font-size: 17px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  button:hover {
+    background: #e652a2; /* Slightly darker pink on hover */
+    transform: translateY(-1px);
+  }
+  button:active {
+    transform: translateY(0);
+  }
+
+  #loginError {
+    color: #ff5255;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 15px;
+  }
+
+  #messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    background:
+      radial-gradient(circle at 20% 80%, rgba(255, 105, 180, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 160, 180, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(255, 192, 203, 0.08) 0%, transparent 60%); /* Multiple subtle radial gradients */
+    background-size: 300% 300%; /* Large background size for movement */
+    background-position: 0% 0%; /* Initial position */
+    animation: moveLoveBackground 25s ease-in-out infinite alternate; /* Slow, gentle animation */
+    border-radius: 0;
+    margin-bottom: 0;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  @keyframes moveLoveBackground {
+    0% { background-position: 0% 0%; }
+    25% { background-position: 50% 100%; }
+    50% { background-position: 100% 0%; }
+    75% { background-position: 50% 0%; }
+    100% { background-position: 0% 100%; }
+  }
+
+
+  .msg {
+    margin-bottom: 8px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+    font-size: 15px;
+    line-height: 1.4;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  }
+  .me {
+    background: #075e54; /* WhatsApp sent message color (dark green) */
+    color: #fff; /* White text for sent messages */
+    margin-left: auto;
+    border-bottom-right-radius: 3px;
+  }
+  .other {
+    background: #262d31; /* WhatsApp received message color (dark gray/blue) */
+    color: #fff; /* White text for received messages */
+    margin-right: auto;
+    border-bottom-left-radius: 3px;
+  }
+  #inputArea {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    padding: 10px 15px;
+    background-color: #202c33;
+    border-top: 1px solid #333;
+    position: relative;
+  }
+
+  #msgInput {
+    flex: 1;
+    padding: 12px 15px;
+    border-radius: 25px;
+    background: #2b2b2b;
+    color: #eee;
+    font-size: 16px;
+    box-shadow: none;
+    min-height: 48px;
+    resize: none;
+    overflow-y: auto;
+  }
+  #msgInput:focus {
+    box-shadow: 0 0 0 2px #ff69b4;
+  }
+
+  .emoji-button, #sendBtn {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border-radius: 50%;
+    margin-top: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    font-size: 0;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    background: #ff69b4; /* Pink */
+    color: #fff;
+    transition: background 0.2s ease-in-out;
+  }
+  .emoji-button:hover, #sendBtn:hover {
+    background: #e652a2; /* Darker pink on hover */
+  }
+
+  .emoji-button::before {
+    content: '😊';
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  #sendBtn::before {
+    content: '➤';
+    font-size: 20px;
+    color: #fff;
+    line-height: 1;
+    transform: rotate(45deg) translateY(-2px) translateX(2px);
+  }
+
+  /* Emoji Picker Styles */
+  #emojiPickerContainer {
+    position: absolute;
+    bottom: 70px;
+    left: 15px;
+    right: 15px;
+    background-color: #2c3e50;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(30px, 1fr));
+    gap: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10;
+    opacity: 0;
+    transform: translateY(20px);
+    visibility: hidden;
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0.2s;
+  }
+
+  #emojiPickerContainer.show {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+  }
+
+  .emoji-item {
+    font-size: 22px;
+    cursor: pointer;
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+    transition: background-color 0.1s ease;
+  }
+  .emoji-item:hover {
+    background-color: #34495e;
+  }
 </style>
 </head>
 <body>
 
 <div id="login">
-    <h2>Umm Chat</h2>
-    <img id="profilePicPreview" src="https://via.placeholder.com/120/333333/FFFFFF?text=+" alt="Profile Preview" />
-    <input type="file" id="profilePicInput" accept="image/*" />
-    <input type="text" id="username" placeholder="Username" autocomplete="off" />
-    <input type="password" id="password" placeholder="Password" autocomplete="off" />
-    <button id="loginBtn">Login</button>
-    <div id="loginError"></div>
+  <h2>Login to Chat</h2>
+  <input type="text" id="username" placeholder="Username" autocomplete="off" />
+  <input type="password" id="password" placeholder="Password" autocomplete="off" />
+  <button id="loginBtn">Login</button>
+  <div id="loginError"></div>
 </div>
 
 <div id="chat">
-    <h2>Global Chat</h2>
-    <div id="typingIndicator"></div>
-    <div id="messages"></div>
-    <div id="inputArea">
-        <input id="msgInput" type="text" placeholder="Type a message..." autocomplete="off" />
-        <button id="sendBtn">&#x27A4;</button>
-    </div>
+  <div class="chat-header">
+    <h2 class="glowing-title">BAPPY AND NABILAS CHATS</h2>
+  </div>
+  <div id="messages"></div>
+  <div id="inputArea">
+    <button class="emoji-button" id="toggleEmojiPicker"></button>
+    <textarea id="msgInput" placeholder="Type a message..." autocomplete="off" rows="1"></textarea>
+    <button id="sendBtn"></button>
+    <div id="emojiPickerContainer"></div>
+  </div>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-  import { getDatabase, ref, push, onValue, update } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+  import { getDatabase, ref, push, onValue, set } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
 
+  // Fixed usernames and passwords
   const validUsers = {
     "bappy": "1234",
-    "user1": "abcd"
+    "user1": "abcd",
+    "nabil": "5678"
   };
 
+  // Your Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyAxb8vACQClmiEsB886aaHFMAitu0wEVQo",
     authDomain: "ummchat009.firebaseapp.com",
@@ -287,6 +340,7 @@
   const db = getDatabase(app);
   const chatRoom = "global_chat";
 
+  // Get elements
   const loginDiv = document.getElementById('login');
   const chatDiv = document.getElementById('chat');
   const loginBtn = document.getElementById('loginBtn');
@@ -296,192 +350,143 @@
   const messagesDiv = document.getElementById('messages');
   const msgInput = document.getElementById('msgInput');
   const sendBtn = document.getElementById('sendBtn');
-  const profilePicInput = document.getElementById('profilePicInput');
-  const profilePicPreview = document.getElementById('profilePicPreview');
-  const typingIndicator = document.getElementById('typingIndicator');
+  const toggleEmojiPickerBtn = document.getElementById('toggleEmojiPicker');
+  const emojiPickerContainer = document.getElementById('emojiPickerContainer');
 
   let currentUser = null;
-  let currentUserProfilePic = null;
-  let selectedFile = null;
+  const LOCAL_STORAGE_USERNAME_KEY = 'chatAppUsername';
 
-  // Load profile pic from localStorage on page load
-  window.addEventListener('load', () => {
-    const savedPic = localStorage.getItem('profilePic');
-    if (savedPic) {
-      profilePicPreview.src = savedPic;
-      currentUserProfilePic = savedPic;
-      selectedFile = null;
+  // --- Emoji Data (Expanded) ---
+  const emojis = [
+    '😀', '😁', '😂', '🤣', '😃', '😄', '😅', '😆', '😉', '😊', '😋', '😎', '😍', '😘', '😗', '😙', '😚', '🤗', '🤔', '🤨', '😐', '😑', '😶', '😏', '😒', '🙄', '😬', '🤥', '😌', '😔', '😪', '🤤', '😴', '😷', '🤒', '🤕', '🤢', '🤮', '🤧', '🥵', '🥶', '😵', '🤯', '🤠', '🥳', '😎', '🤓', '🧐', '😕', '😟', '🙁', '😮', '😯', '😲', '😳', '🥺', '😦', '😧', '😨', '😩', '😫', '😤', '😠', '😡', '🤬', '😈', '👿', '💀', '☠️', '💩', '🤡', '👹', '👺', '👻', '👽', '👾', '🤖', '😺', '😸', '😹', '😻', '😼', '😽', '🙀', '😿', '😾', '👋', '🤚', '🖐️', '✋', '🖖', '👌', '🤏', '✌️', '🤞', '🤟', '🤘', '🤙', '👈', '👉', '👆', '🖕', '👇', '☝️', '👍', '👎', '✊', '👊', '🤛', '🤜', '👏', '🙌', '👐', '🤲', '🤝', '🙏', '✍️', '💅', '🤳', '💪', '🦵', '🦶', '👂', '👃', '🧠', '🦷', '🦴', '👀', '👁️', '👅', '👄', '💋', '❤️', '🧡', '💛', '💚', '💙', '💜', '🤎', '🖤', '🤍', '💔', '❣️', '💕', '💞', '💗', '💖', '💘', '💓', '🧡', '💛', '💚', '💙', '💜', '🤎', '🖤', '🤍', '💌', '💥', '💫', '💥', '✨', '🌟', '💫', '🔥', '💯', '🌈', '☀️', '☔', '☁️', '❄️', '☃️', '⚡', '💧', '🌊', '💨', '🌀', '🌎', '🌍', '🌏', '🌕', '🌖', '🌗', '🌘', '🌑', '🌒', '🌓', '🌔', '🌙', '⭐', '🌟', '💫', '✨', '☄️', '🚀', '🛸', '🛰️', '💡', '🔦', '🔋', '🔌', '💻', '🖥️', '⌨️', '🖱️', '🖨️', '📱', '📞', '☎️', '📟', '📠', '📺', '📻', '🎙️', '🎚️', '🎛️', '🎤', '🎧', '🎼', '🎵', '🎶', '🎷', '🎺', '🎸', '🎹', '🎻', '🥁', '🎬', '🎥', '📸', '📹', '💡', '📓', '📔', '📒', '📚', '📖', '🔖', '🏷️', '💰', '💳', '💎', '📈', '📉', '📊', '🔔', '🔕', '📢', '📣', '💬', '💭', '🫂', '🚶‍♀️', '🚶‍♂️', '🏃‍♀️', '🏃‍♂️', '💃', '🕺', '👨‍👩‍👧‍👦', '👨‍👩‍👧', '👩‍👩‍👧', '👨‍👨‍👧', '👨‍👩‍👦‍👦', '👨‍👨‍👦‍👦', '👩‍👩‍👦‍👦', '👨‍👩‍👧‍👦', '👨‍👩‍👧‍👧', '👩‍👩‍👧‍👧', '👨‍👨‍👧‍👧', '👨‍👩‍👦', '👩‍👩‍👦', '👨‍👨‍👦', '👥', '🧑‍🤝‍🧑', '🫂', '🏡', '🏠', '🏘️', '🏢', '🏗️', '🏭', '⛪', '🕌', '🛕', '🕍', '⛩️', '🏬', '🏪', '🏫', '🎡', '🎢', '🎠', '⛲', '🗼', '🗽', '🏛️', '⛰️', '🗻', '🏕️', '🏖️', '🏜️', '🏝️', '🏞️', '🛣️', '🛤️', '🚂', '🚃', '🚄', '🚅', '🚆', '🚇', '🚈', '🚉', '🚊', '🚗', '🚘', '🚌', '🚍', '🚎', '🚐', '🚑', '🚒', '🚓', '🚔', '🚕', '🚖', '🚗', '🚙', '🚚', '🚛', '🚜', '🛵', '🚲', '🛴', '🛹', '🛺', '✈️', '🛫', '🛬', '💺', '🚁', '🚟', '🚠', '🚡', '🚢', '🛥️', '🚤', '⛵', '🛶', '⛴️', '🛳️', '⚓', '🌠', '🎇', '🎆', '🎑', '🌅', '🌄', '🌆', '🌃', '🌉', '🌁', '⌚', '📱', '💻', '🖥️', '⌨️', '🖱️', '🖨️', '💾', '💿', '📀', '💽', '📼', '📷', '📸', '📹', '🎥', '📞', '☎️', '📟', '📠', '📺', '📻', '🎙️', '🎚️', '🎛️', '🎤', '🎧', '🎼', '🎵', '🎶', '🎷', '🎺', '🎸', '🎹', '🎻', '🥁', '🎯', '🎳', '🎱', '🎲', '♟️', '🎮', '🎰', '🧩', '🏆', '🏅', '🥇', '🥈', '🥉', '⚽', '⚾', '🥎', '🏀', '🏐', '🏈', '🏉', '🎾', '🥏', '🪃', '🏏', '🏑', '🏒', '🥍', '🏓', '🏸', '🥊', '🥋', '🥅', '⛳', '⛸️', '🎣', '🤿', '🎽', '🎿', '🛷', '🥌', '🪢', '🪁', '🛼', '🤿', '🤼‍♀️', '🤼‍♂️', '🤸‍♀️', '🤸‍♂️', '⛹️‍♀️', '⛹️‍♂️', '🤾‍♀️', '🤾‍♂️', '🤺', '🏋️‍♀️', '🏋️‍♂️', '🧘‍♀️', '🧘‍♂️', '🛀', '🛌', '🛋️', '🪑', '🚽', '🚿', '🛁', '🧼', '🪥', '🪒', '🧺', '🧻', '🚽', '🧹', '🪣', '🧴', '🧽', '🧼', '🧺', '🪣', '🧴', '🧽', '🗝️', '🔑', '🚪', '🪞', '🪟', '🛏️', '🪟', '🪑', '🚽', '🚿', '🛁', '🧼', '🪥', '🪒', '🧺', '🧻', '🚽', '🧹', '🪣', '🧴', '🧽', '🍎', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🍈', '🍒', '🍑', '🥭', '🍍', '🥥', '🥝', '🍅', '🍆', '🥑', '🥦', '🥬', '🥒', '🌶️', '🌽', '🥕', '🥔', '🍠', '🥐', '🍞', '🥖', '🥨', '🥯', '🥞', '🧇', '🧀', '🍖', '🍗', '🥩', '🥓', '🍔', '🍟', '🍕', '🌭', '🥪', '🌮', '🌯', '🥙', '🧆', '🥚', '🍳', '🍲', '🥣', '🥗', '🍿', '🧈', '🧂', '🥫', '🍱', '🍘', '🍙', '🍚', '🍛', '🍜', '🍝', '🍠', '🍢', '🍣', '🍤', '🍥', '🥮', '🍡', '🥟', '🥠', '🥡', '🍦', '🍧', '🍨', '🍩', '🍪', '🎂', '🍰', '🧁', '🥧', '🍫', '🍬', '🍭', '🍮', '🍯', '🍼', '🥛', '☕', '🍵', '🍶', '🍾', '🍷', '🍸', '🍹', '🍺', '🍻', '🥂', '🥃', '🥤', '🧉', '🧊', '🥄', '🍴', '🍽️', '🥣', '🥡', '🥢', '🍚', '🥫', '🍿', '🧊', '🧉', '🥤', '🥃', '🥂', '🍻', '🍺', '🍹', '🍸', '🍷', '🍾', '🍶', '🍵', '☕', '🥛', '🍼', '🍯', '🍮', '🍭', '🍬', '🍫', '🥧', '🧁', '🍰', '🎂', '🍪', '🍩', '🍨', '🍧', '🍦', '🥡', '🥠', '🥟', '🍡', '🥮', '🍥', '🍤', '🍣', '🍢', '🍠', '🍝', '🍜', '🍛', '🍚', '🍙', '🍘', '🍱', '🥫', '🧂', '🧈', '🍿', '🥗', '🥣', '🍲', '🍳', '🥚', '🧆', '🥙', '🌯', '🌮', '🥪', '🌭', '🍕', '🍟', '🍔', '🥓', '🥩', '🍗', '🍖', '🧀', '🧇', '🥞', '🥯', '🥨', '🥖', '🍞', '🥐', '🍠', '🥕', '🌽', '🌶️', '🥒', '🥬', '🥦', '🥑', '🍆', '🍅', '🥝', '🥥', '🍍', '🥭', '🍑', '🍒', '🍈', '🍓', '🍇', '🍉', '🍌', '🍋', '🍊', '🍐', '🍎', '🐕', '🐈', '🐁', '🐀', '🐹', '🐰', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐽', '🐸', '🐵', '🐒', '🐶', '🐺', '🦊', '🦝', '🐈', '🐅', '🐆', '🐎', '🦓', '🦌', '🦬', '🐃', '🐂', '🐄', '🐷', '🐗', '🐏', '🐑', '🐐', '🐪', '🐫', '🦙', '🦒', '🐘', '🦏', '🦛', '🐭', '🐁', '🐀', '🐹', '🐰', '🐿️', '🦔', '🦇', '🐻', '🐨', '🐼', '🦥', '🦦', '🦨', '🦘', '🦡', '🐾', '🦃', '🐔', '🐓', '🐣', '🐤', '🐥', '🐦', '🐧', '🕊️', '🦅', '🦆', '🦢', '🦉', '🦩', '🦚', '🦜', '🐸', '🐊', '🐢', '🦎', '🐍', '🐲', '🐉', '🦕', '🦖', '🐳', '🐋', '🐬', '🐟', '🐠', '🐡', '🦈', '🐙', '🐚', '🐌', '🦋', '🐛', '🐜', '🐝', '🐞', '🦗', '🕷️', '🕸️', '🦂', '🦟', '🦠', '💐', '🌸', '💮', '🌹', '🥀', '🌺', '🌻', '🌼', '🌷', '🌱', '🌲', '🌳', '🌴', '🌵', '🌾', '☘️', '🍀', '🍁', '🍂', '🍃', '🍄', '🌰', '🌍', '🌎', '🌏', '🌐', '🗺️', '🧭', '🏔️', '⛰️', '🌋', '🗻', '🏕️', '🏖️', '🏜️', '🏝️', '🏞️', '🏘️', '🏡', '🏠', '🏢', '🏣', '🏤', '🏥', '🏦', '🏨', '🏩', '🏫', '🏪', '🏭', '⛪', '🕌', '🕍', '⛩️', '🕋', '⛲', '🏛️', ' برج', '🗼', '🗽', '🌉', '🛣️', ' rail', '🚂', '🚃', '🚄', '🚅', '🚆', '🚇', '🚈', '🚉', '🚊', '🚝', '🚞', '🚋', '🚌', '🚍', '🚎', '🚐', '🚑', '🚒', '🚓', '🚔', '🚕', '🚖', '🚗', '🚙', '🚚', '🚛', '🚜', '🛵', '🚲', '🛴', '🛹', '🛺', '🚦', '🚧', '🛑', '🚨', '✈️', '🛫', '🛬', '💺', '🚁', '🚟', '🚠', '🚡', '🚢', '🛥️', '🚤', '⛵', '🛶', '⛴️', '🛳️', '⚓', '🌠', '🎇', '🎆', '🎑', '🌅', '🌄', '🌆', '🌃', '🌉', '🌁', '⌚', '📱', '💻', '🖥️', '⌨️', '🖱️', '🖨️', '💾', '💿', '📀', '💽', '📼', '📷', '📸', '📹', '🎥', '📞', '☎️', '📟', '📠', '📺', '📻', '🎙️', '🎚️', '🎛️', '🎤', '🎧', '🎼', '🎵', '🎶', '🎷', '🎺', '🎸', '🎹', '🎻', '🥁', '🎯', '🎳', '🎱', '🎲', '♟️', '🎮', '🎰', '🧩', '🏆', '🏅', '🥇', '🥈', '🥉', '⚽', '⚾', '🥎', '🏀', '🏐', '🏈', '🏉', '🎾', '🥏', '🪃', '🏏', '🏑', '🏒', '🥍', '🏓', '🏸', '🥊', '🥋', '🥅', '⛳', '⛸️', '🎣', '🤿', '🎽', '🎿', '🛷', '🥌', '🪢', '🪁', '🛼', '🤿', '🤼‍♀️', '🤼‍♂️', '🤸‍♀️', '🤸‍♂️', '⛹️‍♀️', '⛹️‍♂️', '🤾‍♀️', '🤾‍♂️', '🤺', '🏋️‍♀️', '🏋️‍♂️', '🧘‍♀️', '🧘‍♂️', '🛀', '🛌', '🛋️', '🪑', '🚽', '🚿', '🛁', '🧼', '🪥', '🪒', '🧺', '🧻', '🚽', '🧹', '🪣', '🧴', '🧽', '🧼', '🧺', '🪣', '🧴', '🧽', '🗝️', '🔑', '🚪', '🪞', '🪟', '🛏️', '🪟', '🪑', '🚽', '🚿', '🛁', '🧼', '🪥', '🪒', '🧺', '🧻', '🚽', '🧹', '🪣', '🧴', '🧽'
+  ];
+
+
+  // Function to load user from local storage
+  function loadUserFromLocalStorage() {
+    const storedUsername = localStorage.getItem(LOCAL_STORAGE_USERNAME_KEY);
+    if (storedUsername && validUsers[storedUsername]) {
+      currentUser = storedUsername;
+      loginDiv.style.display = 'none';
+      chatDiv.style.display = 'flex';
+      startChat();
+      return true;
     }
-  });
+    return false;
+  }
 
-  profilePicInput.addEventListener('change', (event) => {
-    selectedFile = event.target.files[0];
-    if (selectedFile) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const base64Image = e.target.result;
-        profilePicPreview.src = base64Image;
-        currentUserProfilePic = base64Image;
-
-        // Save to localStorage
-        localStorage.setItem('profilePic', base64Image);
-      };
-      reader.readAsDataURL(selectedFile);
-    } else {
-      profilePicPreview.src = "https://via.placeholder.com/120/333333/FFFFFF?text=+";
-      currentUserProfilePic = null;
-      localStorage.removeItem('profilePic');
-    }
-  });
+  // Attempt to load user on page load
+  if (!loadUserFromLocalStorage()) {
+    loginDiv.style.display = 'flex';
+  }
 
   loginBtn.onclick = () => {
     const username = usernameInput.value.trim();
     const password = passwordInput.value.trim();
 
-    if (!validUsers[username] || validUsers[username] !== password) {
+    if (validUsers[username] && validUsers[username] === password) {
+      currentUser = username;
+      localStorage.setItem(LOCAL_STORAGE_USERNAME_KEY, currentUser);
+      loginDiv.style.display = 'none';
+      chatDiv.style.display = 'flex';
+      loginError.textContent = '';
+      startChat();
+    } else {
       loginError.textContent = 'Invalid username or password!';
-      return;
+      usernameInput.value = '';
+      passwordInput.value = '';
+      usernameInput.focus();
     }
-    if (!currentUserProfilePic) {
-      loginError.textContent = 'Please select a profile picture!';
-      return;
-    }
-
-    currentUser = username;
-    loginError.textContent = '';
-    loginDiv.style.display = 'none';
-    chatDiv.style.display = 'flex';
-    startChat();
   };
 
   function startChat() {
     const chatRef = ref(db, "chats/" + chatRoom);
-    const typingRef = ref(db, `typing_status/${chatRoom}`);
 
     onValue(chatRef, (snapshot) => {
       messagesDiv.innerHTML = '';
-      const messages = [];
       snapshot.forEach(child => {
-        messages.push({ key: child.key, ...child.val() });
-      });
-
-      messages.forEach(msg => {
-        const messageContainer = document.createElement('div');
-        messageContainer.classList.add('message-container');
-        messageContainer.classList.add(msg.user === currentUser ? 'me' : 'other');
-
-        const profilePicElement = document.createElement('img');
-        profilePicElement.classList.add('profile-pic-chat');
-        profilePicElement.src = msg.profilePic || "https://via.placeholder.com/120/333333/FFFFFF?text=+";
-        profilePicElement.alt = "Profile Pic";
-
-        const msgDiv = document.createElement('div');
-        msgDiv.classList.add('msg');
-
-        if (msg.user !== currentUser) {
-          const usernameSpan = document.createElement('span');
-          usernameSpan.style.fontWeight = 'bold';
-          usernameSpan.style.marginRight = '5px';
-          usernameSpan.textContent = `${msg.user}:`;
-          msgDiv.appendChild(usernameSpan);
-        }
-
-        msgDiv.innerHTML += msg.text;
-
-        const timestampSpan = document.createElement('span');
-        timestampSpan.classList.add('timestamp');
-        timestampSpan.textContent = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-        const statusIcon = document.createElement('span');
-        statusIcon.classList.add('status-icon');
-        statusIcon.innerHTML = msg.seen ? '&#10003;&#10003;' : '&#10003;';
-        if (msg.seen) {
-          statusIcon.classList.add('seen');
-        }
-        timestampSpan.appendChild(statusIcon);
-        msgDiv.appendChild(timestampSpan);
-
-        if (msg.user === currentUser) {
-          messageContainer.appendChild(msgDiv);
-          messageContainer.appendChild(profilePicElement);
-        } else {
-          messageContainer.appendChild(profilePicElement);
-          messageContainer.appendChild(msgDiv);
-        }
-        messagesDiv.appendChild(messageContainer);
+        const msg = child.val();
+        const div = document.createElement('div');
+        div.classList.add('msg');
+        div.classList.add(msg.user === currentUser ? 'me' : 'other');
+        div.textContent = `${msg.user}: ${msg.text}`;
+        messagesDiv.appendChild(div);
       });
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
 
-    onValue(typingRef, (snapshot) => {
-      const typingUsers = snapshot.val() || {};
-      const otherTypingUsers = Object.keys(typingUsers).filter(user => user !== currentUser && typingUsers[user] === true);
-
-      if (otherTypingUsers.length > 0) {
-        let typingText = '';
-        if (otherTypingUsers.length === 1) {
-          typingText = `${otherTypingUsers[0]} is typing`;
-        } else if (otherTypingUsers.length === 2) {
-          typingText = `${otherTypingUsers[0]} and ${otherTypingUsers[1]} are typing`;
-        } else {
-          typingText = `Multiple users are typing`;
-        }
-        typingIndicator.innerHTML = `${typingText}<span class="typing-animation"><span>.</span><span>.</span><span>.</span></span>`;
-      } else {
-        typingIndicator.innerHTML = '';
-      }
-    });
-
-    sendBtn.onclick = () => {
+    // --- Message Sending Logic ---
+    function sendMessage() {
       const text = msgInput.value.trim();
       if (!text) return;
 
-      push(ref(db, "chats/" + chatRoom), {
+      const chatRefPush = ref(db, "chats/" + chatRoom);
+      push(chatRefPush, {
         user: currentUser,
-        profilePic: currentUserProfilePic,
         text: text,
-        timestamp: Date.now(),
-        seen: false
+        timestamp: Date.now()
       });
-      msgInput.value = '';
-      update(ref(db, `typing_status/${chatRoom}/${currentUser}`), false);
-    };
+      msgInput.value = ''; // Clear input field after sending
+      msgInput.style.height = 'auto'; // Reset textarea height
+      msgInput.focus();
+    }
 
-    let typingTimeout;
-    msgInput.addEventListener('input', () => {
-      update(ref(db, `typing_status/${chatRoom}/${currentUser}`), true);
+    sendBtn.onclick = sendMessage;
 
-      clearTimeout(typingTimeout);
-      typingTimeout = setTimeout(() => {
-        update(ref(db, `typing_status/${chatRoom}/${currentUser}`), false);
-      }, 3000);
-    });
-
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible' && currentUser) {
-        const chatRef = ref(db, "chats/" + chatRoom);
-        onValue(chatRef, (snapshot) => {
-          snapshot.forEach(child => {
-            const msg = child.val();
-            if (msg.user !== currentUser && !msg.seen) {
-              update(ref(db, `chats/${chatRoom}/${child.key}`), { seen: true });
-            }
-          });
-        }, { onlyOnce: true });
+    msgInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) { // Send on Enter, new line on Shift+Enter
+        e.preventDefault(); // Prevent default Enter key behavior (new line)
+        sendMessage();
       }
     });
 
-    if (currentUser) {
-      const chatRef = ref(db, "chats/" + chatRoom);
-      onValue(chatRef, (snapshot) => {
-        snapshot.forEach(child => {
-          const msg = child.val();
-          if (msg.user !== currentUser && !msg.seen) {
-            update(ref(db, `chats/${chatRoom}/${child.key}`), { seen: true });
-          }
-        });
-      }, { onlyOnce: true });
+    // --- Auto-resize textarea for multi-line input ---
+    msgInput.addEventListener('input', () => {
+      msgInput.style.height = 'auto';
+      msgInput.style.height = msgInput.scrollHeight + 'px';
+    });
+
+
+    // --- Emoji Picker Logic ---
+    function populateEmojiPicker() {
+      emojiPickerContainer.innerHTML = ''; // Clear previous emojis
+      emojis.forEach(emoji => {
+        const span = document.createElement('span');
+        span.classList.add('emoji-item');
+        span.textContent = emoji;
+        span.onclick = () => {
+          const start = msgInput.selectionStart;
+          const end = msgInput.selectionEnd;
+          const text = msgInput.value;
+          msgInput.value = text.substring(0, start) + emoji + text.substring(end);
+          msgInput.selectionStart = msgInput.selectionEnd = start + emoji.length;
+          msgInput.focus();
+          msgInput.dispatchEvent(new Event('input')); // Trigger input event for auto-resize
+          emojiPickerContainer.classList.remove('show'); // Hide picker after selection
+        };
+        emojiPickerContainer.appendChild(span);
+      });
     }
+
+    toggleEmojiPickerBtn.onclick = (event) => {
+      event.stopPropagation(); // Prevent click from bubbling to document and closing picker
+      emojiPickerContainer.classList.toggle('show');
+      if (emojiPickerContainer.classList.contains('show')) {
+        populateEmojiPicker(); // Populate only when shown
+      }
+    };
+
+    // Close emoji picker if clicked outside or on a message
+    document.addEventListener('click', (event) => {
+      if (!emojiPickerContainer.contains(event.target) && event.target !== toggleEmojiPickerBtn && !event.target.closest('.msg')) {
+        emojiPickerContainer.classList.remove('show');
+      }
+    });
+
+    // Prevent emoji picker from closing when clicking inside it
+    emojiPickerContainer.addEventListener('click', (event) => {
+      event.stopPropagation();
+    });
   }
 </script>
 
